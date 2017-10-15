@@ -1,0 +1,153 @@
+<UI>
+    <Frame name="CharPortraitTemplate" virtual="true">
+		<Size x="52" y="60"/>
+		<Layers>
+			<Layer level="BORDER">
+				<Texture parentKey="PortraitRing" atlas="GarrMission_PortraitRing" useAtlasSize="true">
+					<Anchors>
+						<Anchor point="TOP"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BORDER" textureSubLevel="-1">
+				<Texture parentKey="Portrait">
+					<Size x="44" y="44"/>
+					<Anchors>
+						<Anchor point="CENTER" relativeKey="$parent.PortraitRing" y="5"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BORDER" textureSubLevel="1">
+				<Texture parentKey="PortraitRingQuality" atlas="GarrMission_PortraitRing_Quality" useAtlasSize="true">
+					<Anchors>
+						<Anchor point="TOP"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BORDER" textureSubLevel="2">
+				<Texture parentKey="LevelBorder" atlas="GarrMission_PortraitRing_LevelBorder" useAtlasSize="true">
+					<Anchors>
+						<Anchor point="BOTTOM" y="-3"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Level" inherits="GameFontHighlightSmall" justifyH="CENTER" text="95">
+					<Anchors>
+						<Anchor point="CENTER" relativeKey="$parent.LevelBorder"/>
+					</Anchors>
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<Texture parentKey="PortraitRingCover" atlas="GarrMission_PortraitRing_Darkener" useAtlasSize="true" hidden="true" alpha="0.6">
+					<Anchors>
+						<Anchor point="TOP" x="0" y="-1"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+	</Frame>
+
+	<Button name="CharFollowerTemplate" virtual="true">
+		<Size x="260" y="56"/>
+		<Anchors>
+			<Anchor point="TOPLEFT" relativePoint="BOTTOMLEFT" x="0" y="-10"/>
+		</Anchors>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<Texture parentKey="BG" atlas="GarrMission_FollowerListButton" useAtlasSize="true">
+					<Anchors>
+						<Anchor point="TOPRIGHT"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BACKGROUND" textureSubLevel="1">
+				<Texture parentKey="Selected" atlas="GarrMission_FollowerListButton-Select" useAtlasSize="true" hidden="true">
+					<Anchors>
+						<Anchor point="TOPRIGHT"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BACKGROUND" textureSubLevel="2">
+				<Texture parentKey="Class" atlas="GarrMission_ClassIcon-DeathKnight" useAtlasSize="true">
+					<Anchors>
+						<Anchor point="TOPRIGHT"/>
+					</Anchors>
+					<Color r="1" g="1" b="1" a=".2"/>
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<FontString parentKey="Name" inherits="GameFontNormal" justifyH="LEFT" text="Goblin Freeman">
+					<Size x="140" y="0"/>
+					<Anchors>
+						<!-- This is re-anchored to PortraitFrame in the Lua code -->
+						<Anchor point="LEFT" relativeKey="$parent.PortraitFrame" relativePoint="LEFT" x="66" y="0"/>
+					</Anchors>
+				</FontString>
+				<FontString parentKey="ILevel" inherits="GameFontHighlightSmall" justifyH="LEFT">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.Name" relativePoint="BOTTOMLEFT" y="-4"/>
+					</Anchors>
+					<Color r="0.745" g="0.745" b="0.745" a="1"/>
+				</FontString>
+				<Texture parentKey="XPBar">
+					<Size x="205" y="4"/>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.BG" relativePoint="BOTTOMLEFT" x="24" y="6"/>
+					</Anchors>
+					<Color r="0.212" g="0" b="0.337" a="1"/>
+				</Texture>
+				<FontString parentKey="Status" inherits="GameFontHighlightSmall" justifyH="LEFT">
+					<Size x="0" y="14"/>
+					<Anchors>
+						<Anchor point="TOPLEFT" relativeKey="$parent.ILevel" relativePoint="TOPRIGHT" x="4" y="0"/>
+					</Anchors>
+					<Color r="0.698" g="0.941" b="1" a="1"/>
+				</FontString>
+			</Layer>
+			<Layer level="OVERLAY">
+				<Texture parentKey="Selection" atlas="GarrMission_FollowerListButton-Select" useAtlasSize="true" hidden="true">
+					<Anchors>
+						<Anchor point="TOP" x="14" y="-1"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+            <Frame parentKey="DurabilityFrame" hidden="true">
+                <Size x="100" y="11"/>
+                <Anchors>
+                    <Anchor point="TOPLEFT" relativeKey="$parent.ILevel" relativePoint="TOPRIGHT" x="0" y="0"/>
+                </Anchors>
+            </Frame>
+			<Frame parentKey="PortraitFrame" inherits="CharPortraitTemplate">
+				<Anchors>
+					<Anchor point="TOPLEFT" x="4" y="2"/>
+				</Anchors>
+				<Scripts>
+					<OnLoad>
+						self:SetFrameLevel(self:GetParent():GetFrameLevel() + 2);
+					</OnLoad>
+				</Scripts>
+			</Frame>
+            <Frame parentKey="BusyFrame" hidden="true">
+                <Anchors>
+                    <Anchor point="TOPLEFT" x="28" y="1"/>
+                    <Anchor point="BOTTOMRIGHT" x="0" y="1"/>
+                </Anchors>
+                <Layers>
+                    <Layer level="ARTWORK">
+                        <Texture parentKey="Texture" setAllPoints="true">
+                            <Color r="0" g="0.06" b="0.22" a="0.44"/>
+                        </Texture>
+                    </Layer>
+                </Layers>
+            </Frame>
+		</Frames>
+		<HighlightTexture parentKey="Highlight" atlas="GarrMission_FollowerListButton-Highlight" useAtlasSize="true">
+			<Anchors>
+				<Anchor point="TOPRIGHT"/>
+			</Anchors>
+		</HighlightTexture>
+	</Button>
+</UI>

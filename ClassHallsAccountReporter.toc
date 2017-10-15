@@ -1,0 +1,21 @@
+## Interface: 70200
+## Title: ClassHallsAccountReporter
+## Author: Geloch
+## Version: 0.1
+## Notes: Allows you to see all the class halls orders/missions and its time left to complet it from any characters!
+## LoadOnDemand: 0
+## SavedVariables: ClassHallsAccountReporterData
+## SavedVariablesPerCharacter: ClassHallsAccountReporterCharacterOptions
+
+
+ClassHallsAccountReporter.lua
+Templates.xml
+FollowersListTemplates.xml
+FollowersHelper.lua
+MissionsTemplates.xml
+FrameHelper.lua
+ReportUI.lua
+Minimap.xml
+Minimap.lua
+Commands.lua
+Init.lua

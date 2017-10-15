@@ -1,0 +1,498 @@
+ <Ui xmlns="http://www.blizzard.com/wow/ui/" xmlns:xsi="http://www.w3.org/2001/XMLSchema-instance" xsi:schemaLocation="http://www.blizzard.com/wow/ui/
+..\FrameXML\UI.xsd">
+	<Script file="Tooltips.lua"/>
+	<!--Characters row template-->
+	<Button name="CHARCharacterRow" hidden="false" virtual="true">
+		<Size>
+			<AbsDimension x="1066" y="81"/>
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="BOTTOMLEFT" x="0" y="-5"/>
+		</Anchors>
+		<HighlightTexture name="$parentHighlight" file="Interface\Addons\ClassHallsAccountReporter\ui\higlighting" alphaMode="BLEND">
+			<TexCoords left="0" right="1" top="0" bottom="1"/>
+		</HighlightTexture>
+		<Layers>
+			<Layer level="BACKGROUND">
+				<!--Background-->
+				<Texture file="Interface\AddOns\ClassHallsAccountReporter\ui\Background" horizTile="true">
+					<Anchors>
+						<Anchor point="TOPRIGHT"/>
+						<Anchor point="BOTTOMLEFT"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+				<!--Borders for each row for the row-->
+				<Layer level="BORDER">
+					<!--Corners of the frame-->
+					<Texture file="Interface\Garrison\ClassHallCombatAlly">
+						<Size>
+							<AbsDimension x="38" y="41"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT"/>
+						</Anchors>
+						<TexCoords left="0.537109375" right="0.833984375" top="0.3076171875" bottom="0.4697265625"/>
+					</Texture>
+					<Texture file="Interface\Garrison\ClassHallCombatAlly">
+						<Size>
+							<AbsDimension x="38" y="41"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPRIGHT"/>
+						</Anchors>
+						<TexCoords right="0.537109375" left="0.833984375" top="0.3076171875" bottom="0.4697265625"/>
+					</Texture>
+					<Texture parentKey="CornerLeftBottom" file="Interface\Garrison\ClassHallCombatAlly">
+						<Size>
+							<AbsDimension x="38" y="41"/>
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMLEFT"/>
+						</Anchors>
+						<TexCoords left="0.537109375" right="0.833984375" bottom="0.3076171875" top="0.4697265625"/>
+					</Texture>
+					<Texture parentKey="CornerRightBottom" file="Interface\Garrison\ClassHallCombatAlly">
+						<Size>
+							<AbsDimension x="38" y="41"/>
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMRIGHT"/>
+						</Anchors>
+						<TexCoords right="0.537109375" left="0.833984375" bottom="0.3076171875" top="0.4697265625"/>
+					</Texture>
+					<Texture parentKey="TopBar" file="Interface\AddOns\ClassHallsAccountReporter\ui\TopBorder" horizTile="true">
+						<Size>
+							<AbsDimension x="256" y="15"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT" x="38"/>
+							<Anchor point="TOPRIGHT" x="-38"/>
+						</Anchors>
+					</Texture>
+					<Texture parentKey="BottomBar" file="Interface\AddOns\ClassHallsAccountReporter\ui\BottomBorder" horizTile="true">
+						<Size>
+							<AbsDimension x="256" y="15"/>
+						</Size>
+						<Anchors>
+							<Anchor point="BOTTOMLEFT" x="38"/>
+							<Anchor point="BOTTOMRIGHT" x="-38"/>
+						</Anchors>
+					</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+		<Frame parentKey="infoFrame">
+			<Size>
+				<AbsDimension x="1006" y="81"/>
+			</Size>
+			<Anchors>
+				<Anchor point="TOPLEFT"/>
+			</Anchors>
+			<Layers>
+				<!--Staring info of the character-->
+				<Layer level="ARTWORK">
+					<!--Class icon on the left-->
+					<Texture name="$parentClassIcon" parentKey="ClassIcon" file="Interface\Garrison\ClassHallFrame">
+						<Size>
+							<AbsDimension x="65" y="65"/>
+						</Size>
+						<Anchors>
+							<Anchor point="LEFT">
+								<Offset>
+									<AbsDimension x="10" y="0"/>
+								</Offset>
+							</Anchor>
+						</Anchors>
+						<TexCoords left="0" right="0" top="0" bottom="0"/>
+					</Texture>
+
+					<!--Characters name info-->
+					<FontString name="$parentCharacterName" parentKey="CharacterName" inherits="GameFontHighlight" justifyH="LEFT" text="">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="80" y="-8"/>
+						</Anchors>	
+					</FontString>
+					<FontString inherits="GameFontHighlight" justifyH="LEFT" text="Level: ">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="80" y="-23"/>
+						</Anchors>	
+					</FontString>
+					<FontString name="$parentCharacterLevel" parentKey="CharacterLevel" inherits="GameFontHighlight" justifyH="LEFT" text="1">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="118" y="-23"/>
+						</Anchors>	
+					</FontString>
+					<FontString inherits="GameFontHighlight" justifyH="LEFT" text="ILvL: ">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="80" y="-38"/>
+						</Anchors>	
+					</FontString>
+					<FontString name="$parentCharacterIlvl" parentKey="CharacterIlvl" inherits="GameFontHighlight" justifyH="LEFT" text="0">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="113" y="-38"/>
+						</Anchors>	
+					</FontString>
+
+					<!--Currencies-->
+					<FontString  inherits="GameFontHighlight" justifyH="LEFT" text="Currency:">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="205" y="-8"/>
+						</Anchors>	
+					</FontString>
+					<!-- Order Resources -->
+					<Texture name="$parentOrderResourcesIcon" parentKey="OrderResourcesIcon" file="Interface\ICONS\INV_OrderHall_OrderResources">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT" x="215" y="-23"/>
+						</Anchors>
+					</Texture>
+					<FontString name="$parentOrderResourcesText" parentKey="OrderResourcesQuantity" inherits="GameFontHighlight" justifyH="LEFT" text="0">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.OrderResourcesIcon" relativePoint="RIGHT" x="4" y="0"/>
+						</Anchors>	
+					</FontString>
+					<!--Blood of Sargeras info-->
+					<Texture name="$parentBloodOfSargerasIcon" parentKey="BloodOfSargerasIcon" file="Interface\ICONS\INV_Blood of Sargeras">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT" x="215" y="-53"/>
+						</Anchors>
+					</Texture>
+					<FontString name="$parentBloodOfSargerasQuantityText" parentKey="BloodOfSargerasQuantity" inherits="GameFontHighlight" justifyH="LEFT" text="0">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.BloodOfSargerasIcon" relativePoint="RIGHT" x="4" y="0"/>
+						</Anchors>	
+					</FontString>
+
+					<!--Gold info-->
+					<Texture name="$parentGoldIcon" parentKey="GoldIcon" file="Interface\ICONS\INV_Misc_Coin_02">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT" x="80" y="-53"/>
+						</Anchors>
+					</Texture>
+					<FontString name="$parentGoldQuantityText" parentKey="GoldQuantity" inherits="GameFontHighlight" justifyH="LEFT" text="0">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.GoldIcon" relativePoint="RIGHT" x="4" y="0"/>
+						</Anchors>	
+					</FontString>
+
+
+					<!--Curious Coin info-->
+					<Texture name="$parentCuriousCoinIcon" parentKey="CuriousCoin" file="Interface\ICONS\INV_Misc_CuriousCoin">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT" x="300" y="-23"/>
+						</Anchors>
+					</Texture>
+					<FontString name="$parentCuriousCoinQuantityText" parentKey="CuriousCoinQuantity" inherits="GameFontHighlight" justifyH="LEFT" text="0">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.CuriousCoin" relativePoint="RIGHT" x="4" y="0"/>
+						</Anchors>	
+					</FontString>
+
+					<!--NetherShard info-->
+					<Texture name="$parentNetherShardsIcon" parentKey="NetherShards" file="Interface\ICONS\INV_DataCrystal01">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT" x="300" y="-38"/>
+						</Anchors>
+					</Texture>
+					<FontString name="$parentNetherShardsQuantityText" parentKey="NetherShardsQuantity" inherits="GameFontHighlight" justifyH="LEFT" text="0">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.NetherShards" relativePoint="RIGHT" x="4" y="0"/>
+						</Anchors>	
+					</FontString>
+
+					<!--Veiled Argunite info-->
+					<Texture name="$parentVeiledArguniteIcon" parentKey="VeiledArgunite" file="Interface\ICONS\Oshugun_CrystalFragments">
+						<Size>
+							<AbsDimension x="15" y="15"/>
+						</Size>
+						<Anchors>
+							<Anchor point="TOPLEFT" x="300" y="-53"/>
+						</Anchors>
+					</Texture>
+					<FontString name="$parentVeiledArguniteQuantityText" parentKey="VeiledArguniteQuantity" inherits="GameFontHighlight" justifyH="LEFT" text="0">
+						<Anchors>
+							<Anchor point="LEFT" relativeKey="$parent.VeiledArgunite" relativePoint="RIGHT" x="4" y="0"/>
+						</Anchors>	
+					</FontString>
+					<!-- Cooking Text-->
+					<FontString inherits="GameFontHighlight" justifyH="LEFT" text="Cooking Orders:">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="405" y="-8"/>
+						</Anchors>	
+					</FontString>
+					<!--Troops-->
+					<FontString inherits="GameFontHighlight" justifyH="LEFT" parentKey="TroopsText" text="Troops:">
+						<Anchors>
+							<Anchor point="TOPLEFT" x="638" y="-8"/>
+						</Anchors>	
+					</FontString>
+				</Layer>
+			</Layers>
+			<Frames>
+				<Frame parentKey="sealFrame" hide="false">
+					<!--Seals-->
+					<Size>
+						<AbsDimension x="50" y="15"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" x="215" y="-38"/>
+					</Anchors>
+					<Layers>
+						<Layer level="ARTWORK">
+							<Texture name="$parentSealsIcon" parentKey="SealsIcon" file="Interface\ICONS\INV_Misc_AzsharaCoin">
+								<Size>
+									<AbsDimension x="15" y="15"/>
+								</Size>
+								<Anchors>
+									<Anchor point="TOPLEFT"/>
+								</Anchors>
+							</Texture>
+							<FontString name="$parentSealsText" parentKey="SealsQuantity" inherits="GameFontHighlight" justifyH="LEFT" text="0">
+								<Anchors>
+									<Anchor point="LEFT" relativeKey="$parent.SealsIcon" relativePoint="RIGHT" x="4" y="0"/>
+								</Anchors>	
+							</FontString>
+						</Layer>
+					</Layers>
+					<Scripts>
+						<OnEnter>	
+							CHARTOOLTIPSGLOBAL:on_EnterSealsInfo(self)
+						</OnEnter>
+						<OnLeave>
+							CHARTOOLTIPSGLOBAL:on_Leave()
+						</OnLeave>
+					</Scripts>
+				</Frame>
+				<Frame parentKey="cookinFrame" hide="false">
+					<!-- Cooking Recepies-->
+					<Size>
+						<AbsDimension x="200" y="50"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" x="410" y="-23"/>
+					</Anchors>	
+					<Layers>
+						<Layer level="ARTWORK">
+
+							<Texture name="$parentCookingOrderIcon" parentKey="CookingOrderIcon" file="Interface\ICONS\INV_RECIPE_70_ Scroll3Star">
+								<Size>
+									<AbsDimension x="50" y="50"/>
+								</Size>
+								<Anchors>
+									<Anchor point="TOPLEFT"/>
+								</Anchors>
+							</Texture>
+							<FontString parentKey="firstLine" inherits="GameFontHighlight" justifyH="LEFT" text=" ">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.CookingOrderIcon" relativePoint="TOPRIGHT" x="4" y="0"/>
+								</Anchors>	
+							</FontString>
+							<FontString parentKey="secondLine" inherits="GameFontHighlight" justifyH="LEFT" text=" ">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.firstLine" relativePoint="BOTTOMLEFT" x="0" y="-5"/>
+								</Anchors>	
+							</FontString>
+							<FontString parentKey="thirdLine" inherits="GameFontHighlight" justifyH="LEFT" text=" ">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.secondLine" relativePoint="BOTTOMLEFT" x="0" y="-5"/>
+								</Anchors>	
+							</FontString>
+						</Layer>
+					</Layers>
+				</Frame>
+			</Frames>
+		</Frame>
+		</Frames>
+	</Button>
+	
+	<!-- Troops Icon Template -->
+	<Frame name="CHARTroopsInfoDisplay" hidden="false" virtual="true">
+		<Size>
+			<AbsDimension x="50" y="50"/>
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="TOPRIGHT" x="10" y="0"/>
+		</Anchors>
+		<Layers>
+			<Layer level="ARTWORK">
+				<Texture textureSubLevel="-1" parentKey="TroopInfoIcon">
+					<Size>
+						<AbsDimension x="50" y="50"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT"/>
+					</Anchors>
+				</Texture>
+				<FontString parentKey="TroopInfoString" inherits="GameFontHighlight" justifyH="LEFT" text="0/0">
+					<Anchors>
+						<Anchor point="TOPRIGHT" x="-12" y="0"/>
+					</Anchors>	
+				</FontString>
+				<Texture parentKey="Done" hidden="true" file="Interface\Garrison\GarrLanding-TradeskillTimerFill">
+					<Size>
+						<AbsDimension x="60" y="60"/>
+					</Size>
+					<Anchors>
+						<Anchor point="CENTER"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+		</Layers>
+		<Frames>
+			<Cooldown parentKey="Swipe" hidden="true" reverse="true" hideCountdownNumbers="true">
+				<Size x="60" y="60"/>
+				<Anchors>
+					<Anchor point="CENTER"/>
+				</Anchors>
+				<SwipeTexture file="Interface\Garrison\GarrLanding-TradeskillTimerFill"/>
+			</Cooldown>	
+		</Frames>
+		<Scripts>
+			<OnEnter>
+				CHARTOOLTIPSGLOBAL:on_EnterToopHead(self)
+			</OnEnter>
+			<OnLeave>
+				CHARTOOLTIPSGLOBAL:on_Leave()
+			</OnLeave>
+		</Scripts>
+	</Frame>
+
+	<!--Big frame below character row template -->
+	<Frame name="CHARCharacterInfoBox" hidden="false" virtual="true">
+		<Size>
+			<AbsDimension x="1066" y="360"/>
+		</Size>
+		<Anchors>
+			<Anchor point="TOPLEFT" relativeKey="$parent" relativePoint="BOTTOMLEFT" x="0" y="0"/>
+		</Anchors>
+		<Layers>
+			<!--Background image for the rectangle-->
+			<Layer level="BACKGROUND">
+				<!--Background-->
+				<Texture file="Interface\AddOns\ClassHallsAccountReporter\ui\Background" horizTile="true" vertTile="true">
+					<Anchors>
+						<Anchor point="TOPRIGHT"/>
+						<Anchor point="BOTTOMLEFT"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="BORDER">
+				<!--Corners of the frame-->
+				<Texture file="Interface\Garrison\ClassHallCombatAlly">
+				  	<Size>
+						<AbsDimension x="38" y="41"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT"/>
+					</Anchors>
+					<TexCoords left="0.537109375" right="0.833984375" bottom="0.3076171875" top="0.4697265625"/>
+				</Texture>
+				<Texture file="Interface\Garrison\ClassHallCombatAlly">
+				  	<Size>
+						<AbsDimension x="38" y="41"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT"/>
+					</Anchors>
+					<TexCoords right="0.537109375" left="0.833984375" bottom="0.3076171875" top="0.4697265625"/>
+				</Texture>
+				<Texture parentKey="BottomBar" file="Interface\AddOns\ClassHallsAccountReporter\ui\BottomBorder" horizTile="true">
+					<Size>
+						<AbsDimension x="256" y="15"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" x="38"/>
+						<Anchor point="BOTTOMRIGHT" x="-38"/>
+					</Anchors>
+				</Texture>
+				<Texture file="Interface\AddOns\ClassHallsAccountReporter\ui\LeftBorder" vertTile="true">
+					<Size>
+						<AbsDimension x="15" y="256"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOMLEFT" y="40"/>
+						<Anchor point="TOPLEFT" y="40"/>
+					</Anchors>
+				</Texture>
+				<Texture file="Interface\AddOns\ClassHallsAccountReporter\ui\RightBorder" vertTile="true">
+					<Size>
+						<AbsDimension x="15" y="256"/>
+					</Size>
+					<Anchors>
+						<Anchor point="BOTTOMRIGHT" y="40"/>
+						<Anchor point="TOPRIGHT"  y="40"/>
+					</Anchors>
+				</Texture>
+			</Layer>
+			<Layer level="ARTWORK">
+				<!--Texts-->
+				<FontString parentKey="ProgressText" inherits="GameFontHighlight" justifyH="LEFT" text=" Missions Inprogress">
+					<Anchors>
+						<Anchor point="TOP" x="-143" y="0"/>
+					</Anchors>	
+				</FontString>
+				<FontString parentKey="AvailableText" inherits="GameFontHighlight" justifyH="LEFT" text="Available Missions">
+					<Anchors>
+						<Anchor point="TOP" x="-143" y="-147"/>
+					</Anchors>
+				</FontString>
+				<!-- Mytics + Stuff-->
+				<FontString parentKey="MyticsTitle" inherits="GameFontHighlight" justifyH="LEFT" text="Mytics+ Information:">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="-315" y="0"/>
+					</Anchors>
+				</FontString>
+				<FontString inherits="GameFontHighlight" justifyH="LEFT" text="Weekly Best Mytic:">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="-310" y="-15"/>
+					</Anchors>
+				</FontString>
+				<FontString parentKey="BestName" inherits="GameFontHighlight" justifyH="LEFT" text="Name:">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="-305" y="-30"/>
+					</Anchors>
+				</FontString>
+				<FontString parentKey="Bestlvl" inherits="GameFontHighlight" justifyH="LEFT" text="Mytic lvl:">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="-305" y="-45"/>
+					</Anchors>
+				</FontString>
+				<FontString parentKey="WeeklyReward" inherits="GameFontHighlight" justifyH="LEFT" text="Min Chest Reward:">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="-305" y="-60"/>
+					</Anchors>
+				</FontString>
+
+				<!--<FontString inherits="GameFontHighlight" justifyH="LEFT" text="All Mytics:">
+					<Anchors>
+						<Anchor point="TOPLEFT" relativePoint="TOPRIGHT" x="-315" y="-90"/>
+					</Anchors>
+				</FontString>-->
+				<Texture parentKey="chestTexture" file="Interface\Garrison\LegionMission" hide="true">
+					<Size>
+						<AbsDimension x="105" y="75"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPRIGHT" x="-20" y="-5"/>
+					</Anchors>
+					<TexCoords left="0" right="0.82421875" top="0" bottom="0.58984375"/>
+				</Texture>
+			</Layer>
+		</Layers>
+	</Frame>
+ </Ui>
