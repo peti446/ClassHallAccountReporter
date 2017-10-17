@@ -2,7 +2,7 @@
 -- Namespace
 --############################################
 local _, addon = ...;
-addon.version = 0.4;
+addon.version = 0.;
 addon.DataToSave = {};
 addon.DataToSave.charactersDatabase = {};
 addon.DataToSave.options = {};
@@ -20,7 +20,7 @@ function addon:WeekResetTime()
         repeat
             -- Add a day to the current time until we are at the reset day
             timeLeftForQuestReset = timeLeftForQuestReset + (24 * 60 * 60);
-        until(tonumber(date("%w", timeLeftForQuestReset)) == weeklyResetDays[GetCVar("portal"):lower()]);
+        until(tonumber(date("%w", timeLeftFor5QuestReset)) == weeklyResetDays[GetCVar("portal"):lower()]);
         -- Yep we are now on the time where the server resets are executed! (timeLeftForQuestReset is now on the exact date and houer)
     end
     return timeLeftForQuestReset;

@@ -22,7 +22,7 @@ function addon:getCHARdefaultOptions()
         ["Version"] = addon.version,
         ["showMinimapIcon"] = false,
         ["debug"] = false,
-        ["minimapPos"] = 165
+        ["minimapPos"] = 145
     };
 end
 
@@ -88,6 +88,9 @@ function addon:eventHandling(event, arg1)
     elseif(event == "CHALLENGE_MODE_COMPLETED") then
         addon:StoreCompletedMytic();
     elseif(event == "CHALLENGE_MODE_START") then
+        if(addon.mytics == nil or type(addon.mytics) ~= "table")then
+            addon.mytics = {};
+        end
         addon.mytics.CurrentID = C_ChallengeMode.GetActiveChallengeMapID();
     else
         if (C_Garrison.HasGarrison(LE_GARRISON_TYPE_7_0)) then
