@@ -2,7 +2,7 @@
 -- Namespace
 --############################################
 local _, addon = ...;
-addon.version = 0.5;
+addon.version = 0.6;
 addon.DataToSave = {};
 addon.DataToSave.charactersDatabase = {};
 addon.DataToSave.options = {};
@@ -569,6 +569,13 @@ function addon:Update()
                     value.mytics = {};
                     value.mytics.list = {};
                     value.mytics.ChestAvailable = false;
+                end
+            end
+        end
+        if(oldVersionDatabase < 0.5) then
+            for name, value in pairs(addon.DataToSave.charactersDatabase.characters) do
+                if(value.pclassName == "DEMON HUNTER") then
+                    value.pclassName = "DEMONHUNTER";
                 end
             end
         end

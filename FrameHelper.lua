@@ -29,7 +29,7 @@ addon.ReportUI.classTextureCoords = {
     ["WARLOCK"] = getClassTextCoord(1,2),
     ["MONK"] = getClassTextCoord(1,0),
     ["DRUID"] = getClassTextCoord(0,2),
-    ["DEMON HUNTER"] = getClassTextCoord(0,1)
+    ["DEMONHUNTER"] = getClassTextCoord(0,1)
 };
 
 
@@ -150,6 +150,9 @@ function ReportUI:createReportFrame()
 
     -- Set Script
     ReportUI.ReportFrame:SetScript("OnEvent", ReportUI.OnEvent);
+
+    --Set Closeable by ESC key
+    tinsert(UISpecialFrames, ReportUI.ReportFrame:GetName());
 
     -- Set Title
     ReportUI.ReportFrame.TitleText:SetText("Class Hall Reporter");
