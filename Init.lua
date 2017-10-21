@@ -36,9 +36,15 @@ function addon:eventHandling(event, arg1)
         if(arg1 ~= Aname_) then
             return;
         end
+        if(ClassHallsAccountReporterData == nil) then
+            ClassHallsAccountReporterData = addon:getCHARdefaultCharacterDatabase();
+        end
 
-        addon.DataToSave.charactersDatabase = ClassHallsAccountReporterData or addon:getCHARdefaultCharacterDatabase();
-        addon.DataToSave.options = ClassHallsAccountReporterCharacterOptions or addon:getCHARdefaultOptions();
+        if(ClassHallsAccountReporterCharacterOptions == nil) then
+            ClassHallsAccountReporterCharacterOptions = addon:getCHARdefaultOptions();
+        end
+        addon.DataToSave.charactersDatabase = ClassHallsAccountReporterData;
+        addon.DataToSave.options = ClassHallsAccountReporterCharacterOptions;
 
         --Check if obligatory values exits
         if(addon.DataToSave.charactersDatabase.Version == nil) then
