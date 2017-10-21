@@ -77,7 +77,7 @@ function ReportUI:updateFrameCharacterInfo(silent)
 
             --Update Mytics +
             local higestLevel = 0;
-            local name = "";
+            local name = nil;
             for id, subtable in pairs(characterInfo.mytics.list) do
                 for i, minfo in ipairs(subtable) do
                     if(higestLevel < minfo.level) then
@@ -290,7 +290,7 @@ function ReportUI:updateTroopsHead(lastTroopFrame, troopName, troopInfo, timeLef
     end
 end
 
-function ReportUI:updateTroopsHeadTooltip(f, ttable, timeLeft)
+function ReportUI:updateTroopsHeadTooltip(f, ttable)
     addon:fixShipmentsInfo(ttable);
     local troopFrameTooltip = f.tooltip;
     troopFrameTooltip.shipment = {};

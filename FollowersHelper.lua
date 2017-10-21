@@ -9,7 +9,7 @@ local FollowersHelper = addon.FollowersHelper;
 function FollowersHelper:SetUpFollowerFrame(frame, followerInfo, ID, timeLeftInMission)
     frame.Name:SetText(followerInfo.name);
     frame.Class:SetDesaturated(false);
-    FollowersHelper:SetupPortrait(frame.PortraitFrame, followerInfo, isTroop);
+    FollowersHelper:SetupPortrait(frame.PortraitFrame, followerInfo);
     local nameOffsetY = 0;
 	FollowersHelper:SetStatusText(frame, followerInfo.status, timeLeftInMission);
 	frame.Class:SetAtlas(followerInfo.classAtlas);
@@ -44,13 +44,13 @@ function FollowersHelper:SetUpFollowerFrame(frame, followerInfo, ID, timeLeftInM
 		frame.Status:SetPoint("TOPLEFT", frame.Name, "BOTTOMLEFT", 0, -2);
 	end
 
-    if (followerInfo.status or (ownedtroops and ownedTroop.status)) then
+    if (followerInfo.status) then
 		nameOffsetY = nameOffsetY + 8;
 	end
     
     frame.Name:SetPoint("LEFT", frame.PortraitFrame, "LEFT", 66, nameOffsetY);
 	frame.Status:SetPoint("RIGHT", -5, 0);
-	if (followerInfo.xp == 0 or followerInfo.levelXP == 0 or isTroop) then
+	if (followerInfo.xp == 0 or followerInfo.levelXP == 0) then
 		frame.XPBar:Hide();
 	else
 		frame.XPBar:Show();
@@ -77,7 +77,6 @@ end
 
 function FollowersHelper:SetQuality(frame, quality)
 	frame.quality = quality;
-	
 	if (quality == 6) then
 		frame.LevelBorder:SetAtlas("legionmission-portraitring_levelborder_epicplus", true);
 		frame.PortraitRing:SetAtlas("legionmission-portraitring-epicplus", true);
@@ -132,6 +131,9 @@ function FollowersHelper:SetILevel(frame, iLevel)
 end
 
 function FollowersHelper:SetupPortrait(frame, followerInfo, isTroop, showILevel)
+	if(not isTroop) then
+		isTroop = false;
+	end
 	FollowersHelper:SetPortraitIcon(frame, followerInfo.iconID);
 	FollowersHelper:SetQuality(frame, followerInfo.quality);
 	local hideLevelOnFollower = isTroop or (followerInfo.quality < LE_ITEM_QUALITY_POOR);

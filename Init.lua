@@ -1,7 +1,7 @@
 --############################################
 -- Namespace
 --############################################
-local _, addon = ...;
+local Aname_, addon = ...;
 
 
 --##########################################################################################################################
@@ -32,20 +32,13 @@ end
 
 function addon:eventHandling(event, arg1)
     addon:Debug(event);
-    if (event == "ADDON_LOADED" and arg1 == "ClassHallsAccountReporter") then
-        --Check and load the charcater options
-        if(ClassHallsAccountReporterCharacterOptions == nil) then
-            --First time the characters options are loaded
-            ClassHallsAccountReporterCharacterOptions = addon:getCHARdefaultOptions();
+    if (event == "ADDON_LOADED") then
+        if(arg1 ~= Aname_) then
+            return;
         end
 
-        -- Check and load the characters database
-        if(ClassHallsAccountReporterData == nil) then
-            ClassHallsAccountReporterData = addon:getCHARdefaultCharacterDatabase();
-        end
-
-        addon.DataToSave.charactersDatabase = ClassHallsAccountReporterData;
-        addon.DataToSave.options = ClassHallsAccountReporterCharacterOptions;
+        addon.DataToSave.charactersDatabase = ClassHallsAccountReporterData or addon:getCHARdefaultCharacterDatabase();
+        addon.DataToSave.options = ClassHallsAccountReporterCharacterOptions or addon:getCHARdefaultOptions();
 
         --Check if obligatory values exits
         if(addon.DataToSave.charactersDatabase.Version == nil) then
@@ -54,12 +47,11 @@ function addon:eventHandling(event, arg1)
         if(addon.DataToSave.charactersDatabase.nextReset == nil) then
             addon.DataToSave.charactersDatabase.nextReset = addon:WeekResetTime();
         end
-
         if(addon.DataToSave.charactersDatabase.characters == nil) then
             addon.DataToSave.charactersDatabase.characters = {};
         end
         addon:Update();
-        self:UnregisterEvent(event);
+        self:UnregisterEvent("ADDON_LOADED");
     elseif(event == "PLAYER_LOGIN") then
         --Reset weekly stuff so its done for all characters
         if(addon.DataToSave.charactersDatabase.nextReset < time()) then
@@ -69,8 +61,8 @@ function addon:eventHandling(event, arg1)
         --Load commands
         addon.Commands:initCommands();
         --Get all data about mitics +
-            C_ChallengeMode.RequestMapInfo();
-            C_ChallengeMode.RequestRewards();
+        C_ChallengeMode.RequestMapInfo();
+        C_ChallengeMode.RequestRewards();
         addon.MinimapIcon:initIcon();
         self:UnregisterEvent(event);
     elseif(event == "GARRISON_LANDINGPAGE_SHIPMENTS") then
@@ -88,7 +80,7 @@ function addon:eventHandling(event, arg1)
     elseif(event == "CHALLENGE_MODE_COMPLETED") then
         addon:StoreCompletedMytic();
     elseif(event == "CHALLENGE_MODE_START") then
-        if(addon.mytics == nil or type(addon.mytics) ~= "table")then
+        if(addon.mytics == nil or type(addon.mytics) ~= "table") then
             addon.mytics = {};
         end
         addon.mytics.CurrentID = C_ChallengeMode.GetActiveChallengeMapID();
@@ -97,6 +89,7 @@ function addon:eventHandling(event, arg1)
 	        C_Garrison.RequestClassSpecCategoryInfo(LE_FOLLOWER_TYPE_GARRISON_7_0);
         end
     end
+
 end
 
 

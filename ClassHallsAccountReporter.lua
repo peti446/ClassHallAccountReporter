@@ -2,7 +2,7 @@
 -- Namespace
 --############################################
 local _, addon = ...;
-addon.version = 0.6;
+addon.version = 0.7;
 addon.DataToSave = {};
 addon.DataToSave.charactersDatabase = {};
 addon.DataToSave.options = {};
@@ -20,7 +20,7 @@ function addon:WeekResetTime()
         repeat
             -- Add a day to the current time until we are at the reset day
             timeLeftForQuestReset = timeLeftForQuestReset + (24 * 60 * 60);
-        until(tonumber(date("%w", timeLeftFor5QuestReset)) == weeklyResetDays[GetCVar("portal"):lower()]);
+        until(tonumber(date("%w", timeLeftForQuestReset)) == weeklyResetDays[GetCVar("portal"):lower()]);
         -- Yep we are now on the time where the server resets are executed! (timeLeftForQuestReset is now on the exact date and houer)
     end
     return timeLeftForQuestReset;
@@ -34,7 +34,7 @@ end
 function addon:tableContains(t, value)
     for i,v in ipairs(t) do
         if(type(v) == "table") then
-            tableContains(v, value);
+            addon:tableContains(v, value);
         else
             return v == value;
         end
@@ -50,7 +50,7 @@ end
 
 -- Function to print a message to the chat.
 function addon:Print(...)
-    msg = string.join(" ","|cFF029CFC[ClassHallsAccountReporter]|r", tostringall(... or "nil"));
+    local msg = string.join(" ","|cFF029CFC[ClassHallsAccountReporter]|r", tostringall(... or "nil"));
     DEFAULT_CHAT_FRAME:AddMessage(msg);
 end
 
@@ -529,11 +529,11 @@ end
 
 -- Reset the weekly data such as the completed seals missions.
 function addon:resetAllCharactersWeeklyData()
-    addon.DataToSave.charactersDatabase.nextReset = addon.WeekResetTime();
+    addon.DataToSave.charactersDatabase.nextReset = addon:WeekResetTime();
     for name,v in pairs(addon.DataToSave.charactersDatabase.characters) do
         addon:Debug("Doing the weekly reset on: " .. name);
         wipe(v["currency"]["SealsMissionsCompleted"]);
-        if(#v.mytics.list > 0) then
+        if(next(v.mytics.list) ~= nil) then
             v.mytics.ChestAvailable = true;
         end
         wipe(v["mytics"]["list"]);
@@ -562,20 +562,18 @@ function addon:Update()
     if(oldVersionDatabase ~= currentVersion) then
         addon:Print("Old saved settings detected, updating them...!");
         -- Version 0.2 options does not change
-        -- Version 0.3
-        if(oldVersionDatabase < 0.3) then
-            for name , value in pairs(addon.DataToSave.charactersDatabase.characters) do
+        -- Version 0.3 Mytics where added
+        -- Version 0.6 Demon Hunter fixed
+        -- Version 0.7 Fixed Crash and fixed the update function was not updating anything Y.Y
+        if(oldVersionDatabase < 0.7) then
+            for name, value in pairs(addon.DataToSave.charactersDatabase.characters) do
+                if(value.pclassName == "DEMON HUNTER") then
+                    value.pclassName = "DEMONHUNTER";
+                end
                 if(value.mytics == nil or type(value.mytics) ~= "table") then
                     value.mytics = {};
                     value.mytics.list = {};
                     value.mytics.ChestAvailable = false;
-                end
-            end
-        end
-        if(oldVersionDatabase < 0.5) then
-            for name, value in pairs(addon.DataToSave.charactersDatabase.characters) do
-                if(value.pclassName == "DEMON HUNTER") then
-                    value.pclassName = "DEMONHUNTER";
                 end
             end
         end
@@ -585,7 +583,7 @@ function addon:Update()
 
     if(oldVersionOptions ~= currentVersion) then
         addon:Print("Old Character settings detected, updating them...!");
-        if(oldVersionOptions < 0.3) then
+        if(oldVersionOptions < 0.7) then
             if(options.debug == nil) then
                 options.debug = false;
             end
