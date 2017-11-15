@@ -20,8 +20,8 @@ end
 addon.ReportUI.classTextureCoords = {
     ["WARRIOR"] =getClassTextCoord(1,3),
     ["PALADIN"] = getClassTextCoord(2,0),
-    ["HUNTER"] = getClassTextCoord(4,0),
-    ["ROGUE"] = getClassTextCoord(0,3),
+    ["HUNTER"] = getClassTextCoord(0,3),
+    ["ROGUE"] = getClassTextCoord(4,0),
     ["PRIEST"] = getClassTextCoord(3,0),
     ["DEATHKNIGHT"] = getClassTextCoord(0,0),
     ["SHAMAN"] = getClassTextCoord(1,1),
