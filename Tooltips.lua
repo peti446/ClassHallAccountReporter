@@ -12,36 +12,38 @@ function Tooltips:on_EnterToopHead(self)
 	GameTooltip:SetPoint("BOTTOM", self, "TOP", 0, 5);
     GameTooltip:SetText("|cFFFFFFFF"..self.name);
     GameTooltip:AddLine(" ");
-    local count = 0;
-    if(self.tooltip.shipment) then
-        GameTooltip:AddLine("Training troops:");
-        GameTooltip:AddLine("Ready to Colect: |cFF3AFF00" .. self.tooltip.shipment.ready .. "|r");
-        count = count + self.tooltip.shipment.total;
-        if(self.tooltip.shipment.total-self.tooltip.shipment.ready > 0) then
-            GameTooltip:AddLine("Total in training: |cFFff6600" .. self.tooltip.shipment.total .. "|r");
+    if(self.tooltip ~= nil and type(self.tooltip) == "table") then
+        local count = 0;
+        if(self.tooltip.shipment) then
+            GameTooltip:AddLine("Training troops:");
+            GameTooltip:AddLine("Ready to Colect: |cFF3AFF00" .. self.tooltip.shipment.ready .. "|r");
+            count = count + self.tooltip.shipment.total;
+            if(self.tooltip.shipment.total-self.tooltip.shipment.ready > 0) then
+                GameTooltip:AddLine("Total in training: |cFFff6600" .. self.tooltip.shipment.total .. "|r");
+            end
+            GameTooltip:AddLine(" ");
         end
-        GameTooltip:AddLine(" ");
-    end
 
 
-    for fid, das in pairs(self.tooltip.durability) do
-        count = count + 1;
-        local durabilityColorStr = "|cFF3AFF00";
-        if(das.durability == 1) then
-            durabilityColorStr = "|cFFFF0000";
-        elseif(das.durability < self.tooltip.maxDurability) then
-            durabilityColorStr = "|cFFFF8F00";
+        for fid, das in pairs(self.tooltip.durability) do
+            count = count + 1;
+            local durabilityColorStr = "|cFF3AFF00";
+            if(das.durability == 1) then
+                durabilityColorStr = "|cFFFF0000";
+            elseif(das.durability < self.tooltip.maxDurability) then
+                durabilityColorStr = "|cFFFF8F00";
+            end
+            GameTooltip:AddLine("Durability: " .. durabilityColorStr .. das.durability .. "/" .. self.tooltip.maxDurability .. " |r- |cFF42ebf4" .. ((self.tooltip.timeLeft[fid]) or "|r|cFF3AFF00Standby") .. "|r"); 
         end
-        GameTooltip:AddLine("Durability: " .. durabilityColorStr .. das.durability .. "/" .. self.tooltip.maxDurability .. " |r- |cFF42ebf4" .. ((self.tooltip.timeLeft[fid]) or "|r|cFF3AFF00Standby") .. "|r"); 
-    end
-    
-    if(count == 0) then
-        GameTooltip:AddLine("No Troops Available...");
-        GameTooltip:AddLine("Recruit more troops!")
-    elseif(count < self.tooltip.maxCount) then
-        GameTooltip:AddLine(" ");
-        GameTooltip:AddLine("You can recruit |cFFff0000" .. (self.tooltip.maxCount-count) .. "|r more troop".. (count == 1 and "" or "s") .."!");
-        GameTooltip:AddLine("Visit you Class Hall to start the recuitment")
+        
+        if(count == 0) then
+            GameTooltip:AddLine("No Troops Available...");
+            GameTooltip:AddLine("Recruit more troops!")
+        elseif(count < self.tooltip.maxCount) then
+            GameTooltip:AddLine(" ");
+            GameTooltip:AddLine("You can recruit |cFFff0000" .. (self.tooltip.maxCount-count) .. "|r more troop".. (count == 1 and "" or "s") .."!");
+            GameTooltip:AddLine("Visit you Class Hall to start the recuitment")
+        end
     end
 	GameTooltip:Show();
 end

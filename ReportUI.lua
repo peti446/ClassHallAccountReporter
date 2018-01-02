@@ -53,7 +53,9 @@ function ReportUI:updateFrameCharacterInfo(silent)
             end
 
             for id, ttable in pairs(characterInfo.troopsInTraining) do
-                ReportUI:updateTroopsHeadTooltip(frame.troopHeads[ttable.name], ttable);
+                if(frame.troopHeads[ttable.name] ~= nil) then
+                    ReportUI:updateTroopsHeadTooltip(frame.troopHeads[ttable.name], ttable);
+                end
             end
 
             --Update available Missions
