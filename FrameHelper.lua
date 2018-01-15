@@ -7,6 +7,7 @@ addon.ReportUI = {};
 local ReportUI = addon.ReportUI;
 ReportUI.ReportFrame = nil;
 
+
 --Function to calculate the text coord
 local function getClassTextCoord(x,y)
     return {
@@ -293,10 +294,12 @@ function ReportUI:createReportFrame()
         local lastMissionFrame = AvailableMissionsscrollChild;
         for i, miss in pairs(v.availableMissions) do
             if(not miss.offerEndTime or (miss.offerEndTime + miss.timeInfoCollected) > time()) then
-                frame.BigInfoFrame.AvailableMissionsArray[miss.name] = CreateFrame("Frame", nil, lastMissionFrame, "CharGarrisonLandingPageReportMissionTemplate");
+                frame.BigInfoFrame.AvailableMissionsArray[miss.name] = ReportUI:CreateMissionFrame(lastMissionFrame);
+                lastMissionFrame.childMissFrame = frame.BigInfoFrame.AvailableMissionsArray[miss.name];
                 if (lastMissionFrame == AvailableMissionsscrollChild) then
                     frame.BigInfoFrame.AvailableMissionsArray[miss.name]:ClearAllPoints();
                     frame.BigInfoFrame.AvailableMissionsArray[miss.name]:SetPoint("TOPLEFT", AvailableMissionsscrollChild, "TOPLEFT", 0, 0);
+                    lastMissionFrame.childMissFrame = nil;
                 end
                 AvailableMissionsscrollChild:SetHeight(AvailableMissionsscrollChild:GetHeight()+frame.BigInfoFrame.AvailableMissionsArray[miss.name]:GetHeight()+math.abs(select(5,frame.BigInfoFrame.AvailableMissionsArray[miss.name]:GetPoint(1)) or 0));
                 lastMissionFrame = frame.BigInfoFrame.AvailableMissionsArray[miss.name];
@@ -309,10 +312,12 @@ function ReportUI:createReportFrame()
         lastMissionFrame = ProgresssMissionsscrollChild;
         local followersTimeLeftInMission = {};
         for i, miss in addon:SortMissions(v.activeMissions) do
-            frame.BigInfoFrame.ProgressMissionsArray[miss.name] = CreateFrame("Frame", nil, lastMissionFrame, "CharGarrisonLandingPageReportMissionTemplate");
+            frame.BigInfoFrame.ProgressMissionsArray[miss.name] = ReportUI:CreateMissionFrame(lastMissionFrame);
+            lastMissionFrame.childMissFrame = frame.BigInfoFrame.ProgressMissionsArray[miss.name];
             if (lastMissionFrame == ProgresssMissionsscrollChild) then
                 frame.BigInfoFrame.ProgressMissionsArray[miss.name]:ClearAllPoints();
                 frame.BigInfoFrame.ProgressMissionsArray[miss.name]:SetPoint("TOPLEFT", ProgresssMissionsscrollChild, "TOPLEFT", 0, 0);
+                lastMissionFrame.childMissFrame = nil;
             end 
             ProgresssMissionsscrollChild:SetHeight(ProgresssMissionsscrollChild:GetHeight()+frame.BigInfoFrame.ProgressMissionsArray[miss.name]:GetHeight()+math.abs(select(5,frame.BigInfoFrame.ProgressMissionsArray[miss.name]:GetPoint(1)) or 0));
             lastMissionFrame = frame.BigInfoFrame.ProgressMissionsArray[miss.name];
@@ -348,4 +353,30 @@ function ReportUI:createReportFrame()
     --hide the frame then return the frame
     ReportUI.ReportFrame:Hide();
     return ReportUI.ReportFrame;
+end
+
+
+--Locals for frame managements
+local storedMissions = {};
+
+function ReportUI:HideMissionFrame() 
+    self:ActualHide();
+    addon:Debug("Stored Mission Frame");
+    table.insert(storedMissions, self);
+end
+
+function ReportUI:CreateMissionFrame(parent)
+    local top = #storedMissions;
+    if(top == 0) then
+        local tempFrame = CreateFrame("Frame", nil, parent, "CharGarrisonLandingPageReportMissionTemplate");
+        tempFrame.ActualHide = tempFrame.Hide;
+        tempFrame.Hide = ReportUI.HideMissionFrame;
+        return tempFrame;
+    else 
+        local value = table.remove(storedMissions);
+        value:ClearAllPoints();
+        value:SetParent(parent);
+        value:SetPoint("TOPLEFT", value:GetParent(), "BOTTOMLEFT", 0, -1);
+        return value;
+    end
 end

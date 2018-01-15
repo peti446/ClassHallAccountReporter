@@ -2,7 +2,7 @@
 -- Namespace
 --############################################
 local _, addon = ...;
-addon.version = 0.9;
+addon.version = 1.0;
 addon.DataToSave = {};
 addon.DataToSave.charactersDatabase = {};
 addon.DataToSave.options = {};
@@ -262,7 +262,7 @@ function addon:storeCurrencyInfo()
     -- Get resources,Seals of Broken Fate and other currencies for the character
     local _, amountResources = GetCurrencyInfo(1220);
     local _, amountSeal =  GetCurrencyInfo(1273);
-    local _, amountnethershards = GetCurrencyInfo(1226);
+    local _, amountWakeningEssence = GetCurrencyInfo(1533);
     local _, amountcuriouscoin = GetCurrencyInfo(1275);
     local _, amountveiledargunite = GetCurrencyInfo(1508);
     addon.CurrentCharacterInfo.currency =  {
@@ -270,7 +270,7 @@ function addon:storeCurrencyInfo()
         ["SealsOfBrokenFate"] = amountSeal,
         ["bloodOfSargeras"] = GetItemCount(124124, true),
         ["gold"] = (GetMoney()/100)/100,
-        ["nethershards"] = amountnethershards,
+        ["WakeningEssence"] = amountWakeningEssence,
         ["curiouscoin"] = amountcuriouscoin,
         ["veiledargunite"] = amountveiledargunite,
         ["SealsMissionsCompleted"] = {}
@@ -565,6 +565,7 @@ function addon:Update()
         -- Version 0.3 Mytics where added
         -- Version 0.6 Demon Hunter fixed
         -- Version 0.7 Fixed Crash and fixed the update function was not updating anything Y.Y
+        -- Version 1.0 Fixed error with mitic+ showing a different ilvl
         if(oldVersionDatabase < 0.7) then
             for name, value in pairs(addon.DataToSave.charactersDatabase.characters) do
                 if(value.pclassName == "DEMON HUNTER") then
@@ -574,6 +575,13 @@ function addon:Update()
                     value.mytics = {};
                     value.mytics.list = {};
                     value.mytics.ChestAvailable = false;
+                end
+            end
+        end
+        if(oldVersionDatabase < 1.0) then
+            for name, value in pairs(addon.DataToSave.charactersDatabase.characters) do
+                if(value.currency.WakeningEssence == nil) then
+                    value.currency.WakeningEssence = 0;
                 end
             end
         end

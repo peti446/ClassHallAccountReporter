@@ -201,7 +201,7 @@
 					</FontString>
 
 					<!--NetherShard info-->
-					<Texture name="$parentNetherShardsIcon" parentKey="NetherShards" file="Interface\ICONS\INV_DataCrystal01">
+					<Texture name="$parentWakeningEssenceIcon" parentKey="WakeningEssence" file="Interface\ICONS\Achievement_Dungeon_Ulduar80_25man">
 						<Size>
 							<AbsDimension x="15" y="15"/>
 						</Size>
@@ -209,9 +209,9 @@
 							<Anchor point="TOPLEFT" x="300" y="-38"/>
 						</Anchors>
 					</Texture>
-					<FontString name="$parentNetherShardsQuantityText" parentKey="NetherShardsQuantity" inherits="GameFontHighlight" justifyH="LEFT" text="0">
+					<FontString name="$parentWakeningEssenceQuantityText" parentKey="WakeningEssenceQuantity" inherits="GameFontHighlight" justifyH="LEFT" text="0">
 						<Anchors>
-							<Anchor point="LEFT" relativeKey="$parent.NetherShards" relativePoint="RIGHT" x="4" y="0"/>
+							<Anchor point="LEFT" relativeKey="$parent.WakeningEssence" relativePoint="RIGHT" x="4" y="0"/>
 						</Anchors>	
 					</FontString>
 

@@ -74,6 +74,9 @@ function addon:eventHandling(event, arg1)
     elseif(event == "GARRISON_LANDINGPAGE_SHIPMENTS") then
          -- Update all as nearly all is available
          addon:allInfoUpdater();
+    elseif(event == "GARRISON_MISSION_LIST_UPDATE" or event == "GARRISON_MISSION_STARTED") then
+        --Update missions
+        addon:storeShipmentsInfo()
     elseif(event == "GARRISON_FOLLOWER_ADDED" or event == "GARRISON_FOLLOWER_REMOVED") then
         -- Update followers
         addon:storeFollowersAndTroopsInfo();
@@ -110,6 +113,8 @@ main_frame:RegisterEvent("GARRISON_FOLLOWER_CATEGORIES_UPDATED");
 main_frame:RegisterEvent("GARRISON_FOLLOWER_ADDED");
 main_frame:RegisterEvent("GARRISON_FOLLOWER_REMOVED");
 main_frame:RegisterEvent("GARRISON_LANDINGPAGE_SHIPMENTS");
+main_frame:RegisterEvent("GARRISON_MISSION_LIST_UPDATE");
+main_frame:RegisterEvent("GARRISON_MISSION_STARTED");
 main_frame:RegisterEvent("GARRISON_SHOW_LANDING_PAGE");
 main_frame:RegisterEvent("CHAT_MSG_CURRENCY");
 main_frame:RegisterEvent("BONUS_ROLL_RESULT");

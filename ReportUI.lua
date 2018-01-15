@@ -7,15 +7,20 @@ local ReportUI = addon.ReportUI;
 
 local myticsChestRewards = {
     [0] = "|cFFFF0000NONE|r",
-    [2] = 910,
+    [2] = 905,
     [3] = 910,
     [4] = 915,
-    [5] = 915,
+    [5] = 920,
     [6] = 920,
     [7] = 925,
     [8] = 925,
     [9] = 930,
     [10] = 935,
+    [11] = 940,
+    [12] = 945,
+    [13] = 950,
+    [14] = 955,
+    [15] = 960,
 };
 
 function ReportUI:updateFrameCharacterInfo(silent)
@@ -26,10 +31,12 @@ function ReportUI:updateFrameCharacterInfo(silent)
         if(values:IsShown()) then
             local frame = values.infoFrame;
             local characterInfo = addon.DataToSave.charactersDatabase.characters[name];
+
+            --We only need to update currencies if we are online with the caracters, as oflines caharacters currencies will never change
             if(characterInfo == addon.CurrentCharacterInfo) then
                 ReportUI:UpdateCurrencies(frame, characterInfo);
             end
-            
+
             --Update in progress Missions
             local amountOfMissionsInProgres = 0;
             local followersTimeLeftInMission = {};
@@ -38,10 +45,50 @@ function ReportUI:updateFrameCharacterInfo(silent)
                      ReportUI:updateMission(misFrame, characterInfo.activeMissions[i], followersTimeLeftInMission);
                      amountOfMissionsInProgres = amountOfMissionsInProgres + 1;
                 else
+                    local nextFrame = misFrame.childMissFrame;
+                    local parent = misFrame:GetParent();
+                    local framePoint = misFrame; 
+                    --TODO: Check for MEGA parrent for the offset
+                    while not parent:IsShown() do
+                        if(parent:GetParent() == nil) then
+                            break;
+                        end
+                        framePoint = parent;
+                        parent = parent:GetParent();
+                    end
+                    if(nextFrame ~= nil) then
+                        nextFrame:ClearAllPoints();
+                        nextFrame:SetParent(parent);
+                        local point, relativeTo, relativePoint, x, y = framePoint:GetPoint(1);
+                        nextFrame:SetPoint(point, parent, relativePoint, x, y);
+                    end
                     misFrame:Hide();
+                    frame.BigInfoFrame.ProgressMissionsArray[i] = nil;
                 end
             end
             
+            --Create new Missions frames if necessary
+            local lastMissionFrame = frame.BigInfoFrame.ProgressMissionsArray[#frame.BigInfoFrame.ProgressMissionsArray];
+            local ProgresssMissionsscrollChild = frame.BigInfoFrame.ProgresssMissionsScrollFrame;
+            if(#frame.BigInfoFrame.ProgressMissionsArray <= 0) then
+                lastMissionFrame = ProgresssMissionsscrollChild;
+            end
+            for i, miss in addon:SortMissions(characterInfo.activeMissions) do
+                --Only create new frame if it does not exists
+                if(frame.BigInfoFrame.ProgressMissionsArray[miss.name] == nil) then
+                    frame.BigInfoFrame.ProgressMissionsArray[miss.name] = ReportUI:CreateMissionFrame(lastMissionFrame);
+                    if (lastMissionFrame == ProgresssMissionsscrollChild) then
+                        frame.BigInfoFrame.ProgressMissionsArray[miss.name]:ClearAllPoints();
+                        frame.BigInfoFrame.ProgressMissionsArray[miss.name]:SetPoint("TOPLEFT", ProgresssMissionsscrollChild, "TOPLEFT", 0, 0);
+                    end 
+                    ProgresssMissionsscrollChild:SetHeight(ProgresssMissionsscrollChild:GetHeight()+frame.BigInfoFrame.ProgressMissionsArray[miss.name]:GetHeight()+math.abs(select(5,frame.BigInfoFrame.ProgressMissionsArray[miss.name]:GetPoint(1)) or 0));
+                    lastMissionFrame = frame.BigInfoFrame.ProgressMissionsArray[miss.name];
+                    lastMissionFrame.TimeLeft:Hide();
+                    lastMissionFrame.Status:Hide();
+                    ReportUI:updateMission(lastMissionFrame, characterInfo.activeMissions[miss.name], followersTimeLeftInMission);
+                end
+            end
+
             --Update cooking value
             ReportUI:updateCooking(frame, characterInfo);
             
@@ -64,12 +111,54 @@ function ReportUI:updateFrameCharacterInfo(silent)
                 if(characterInfo.availableMissions[i]) then
                     ReportUI:UpdateAvlMissions(misFrame, characterInfo.availableMissions[i]);
                 else
+                    local nextFrame = misFrame.childMissFrame;
+                    local parent = misFrame:GetParent();
+                    local framePoint = misFrame; 
+                    while not parent:IsShown() do
+                        if(parent:GetParent() == nil) then
+                            break;
+                        end
+                        framePoint = parent;
+                        parent = parent:GetParent();
+                    end
+                    if(nextFrame ~= nil) then
+                        nextFrame:ClearAllPoints();
+                        nextFrame:SetParent(parent);
+                        local point, relativeTo, relativePoint, x, y = framePoint:GetPoint(1);
+                        nextFrame:SetPoint(point, parent, relativePoint, x, y);
+                    end
                     misFrame:Hide();
+                    frame.BigInfoFrame.AvailableMissionsArray[i] = nil;
                 end
                 if(misFrame:IsShown()) then
                     amountOfMissions = amountOfMissions +1;
                 end
             end
+
+            --Create new available Missions frame if neccecary
+            lastMissionFrame = frame.BigInfoFrame.AvailableMissionsScrollFrame;
+            if(#frame.BigInfoFrame.AvailableMissionsArray > 0) then
+                lastMissionFrame = frame.BigInfoFrame.AvailableMissionsArray[#frame.BigInfoFrame.AvailableMissionsArray];
+            end
+            for i, miss in pairs(characterInfo.availableMissions) do
+                if(frame.BigInfoFrame.AvailableMissionsArray[miss.name] == nil) then
+                    if(not miss.offerEndTime or (miss.offerEndTime + miss.timeInfoCollected) > time()) then
+                        frame.BigInfoFrame.AvailableMissionsArray[miss.name] = ReportUI:CreateMissionFrame(lastMissionFrame);
+                        if (lastMissionFrame == AvailableMissionsscrollChild) then
+                            frame.BigInfoFrame.AvailableMissionsArray[miss.name]:ClearAllPoints();
+                            frame.BigInfoFrame.AvailableMissionsArray[miss.name]:SetPoint("TOPLEFT", AvailableMissionsscrollChild, "TOPLEFT", 0, 0);
+                        end
+                        AvailableMissionsscrollChild:SetHeight(AvailableMissionsscrollChild:GetHeight()+frame.BigInfoFrame.AvailableMissionsArray[miss.name]:GetHeight()+math.abs(select(5,frame.BigInfoFrame.AvailableMissionsArray[miss.name]:GetPoint(1)) or 0));
+                        lastMissionFrame = frame.BigInfoFrame.AvailableMissionsArray[miss.name];
+                        lastMissionFrame.TimeLeft:Hide();
+                        ReportUI:UpdateAvlMissions(lastMissionFrame, characterInfo.availableMissions[i]);
+                        if(lastMissionFrame:IsShown()) then
+                            amountOfMissions = amountOfMissions +1;
+                        end
+                    end
+                end
+            end
+
             frame.BigInfoFrame.AvailableText:SetText("Available Missions".." (".. amountOfMissions.."):");
             frame.BigInfoFrame.ProgressText:SetText("Missions Inprogress".." (".. amountOfMissionsInProgres.."):");
             --Update followers text
@@ -88,8 +177,8 @@ function ReportUI:updateFrameCharacterInfo(silent)
                     end
                 end
             end
-            if(higestLevel > 10) then
-                frame.BigInfoFrame.WeeklyReward:SetText("Min Chest Reward: |cFFffb600" .. myticsChestRewards[10] .. "|r");
+            if(higestLevel > 15) then
+                frame.BigInfoFrame.WeeklyReward:SetText("Min Chest Reward: |cFFffb600" .. myticsChestRewards[15] .. "|r");
             else 
                 frame.BigInfoFrame.WeeklyReward:SetText("Min Chest Reward: |cFFffb600" .. myticsChestRewards[higestLevel] .. "|r");     
             end
@@ -127,7 +216,7 @@ function ReportUI:UpdateCurrencies(frame, v)
     frame.sealFrame.seals = (v.currency.SealsOfBrokenFate or 0);
     frame.sealFrame.canGetSeals = (v.plevel == 110);
     frame.BloodOfSargerasQuantity:SetText(v.currency.bloodOfSargeras or "0");
-    frame.NetherShardsQuantity:SetText(v.currency.nethershards or "0");
+    frame.WakeningEssenceQuantity:SetText(v.currency.WakeningEssence or "0");
     frame.CuriousCoinQuantity:SetText(v.currency.curiouscoin or "0");
     frame.VeiledArguniteQuantity:SetText(v.currency.veiledargunite or "0");
 end
