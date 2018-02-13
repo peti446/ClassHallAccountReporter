@@ -2,7 +2,7 @@
 -- Namespace
 --############################################
 local _, addon = ...;
-addon.version = 1.0;
+addon.version = 1.1;
 addon.DataToSave = {};
 addon.DataToSave.charactersDatabase = {};
 addon.DataToSave.options = {};
@@ -220,6 +220,7 @@ function addon:prepareCharacterDataBase()
         shipments = {},
         mytics = {
             ["ChestAvailable"] = false,
+            ["Keystone"] = {},
             ["list"] = {},
         }
     } , addon.DataToSave.charactersDatabase.characters[name]);
@@ -228,9 +229,57 @@ function addon:prepareCharacterDataBase()
     addon.CurrentCharacterInfo = addon.DataToSave.charactersDatabase.characters[name];
 end
 
+--Function to get a keystone from the bags
+-- Returns the full link for the key
+function addon:GetKeystoneFromBags()
+    for bag = 0, NUM_BAG_SLOTS + 1 do
+        for bagSlot = 1, GetContainerNumSlots(bag) do
+            local currentItemInSlotID = GetContainerItemID(bag, bagSlot);
+            if(currentItemInSlotID) then
+                if(currentItemInSlotID == 138019) then
+                    return GetContainerItemLink(bag, bagSlot);
+                end
+            end
+        end
+    end
+    return nil;
+end
+
 --##########################################################################################################################
 --                                  Functions to get Players Info
 --##########################################################################################################################
+
+function addon:StoreKeyInformation()
+    -- Prepare the character if 
+    if(UnitLevel('player') ~= 110) then
+        return;
+    end
+    addon:prepareCharacterDataBase();
+    -- Example of a key link :|cffa335ee|Hkeystone:209:15:8:12:10|h[Keystone: The Arcway (15)]|h|r
+    -- Patter matching to extract usefull data  link:gsub('\124', '\124\124'):match(':(%d+):(%d+):(%d+):(%d+):(%d+)');
+    -- MAPID, level, afix1, afix2, afix3
+    -- C_ChallengeMode.GetMapInfo(id);
+    local keyStoneLink = addon:GetKeystoneFromBags();
+    if(keyStoneLink) then
+        if(keyStoneLink:find('keystone')) then
+            local mapid, level, afix1, afix2, afix3 = link:gsub('\124', '\124\124'):match(':(%d+):(%d+):(%d+):(%d+):(%d+)');
+            addon.CurrentCharacterInfo.mytics.Keystone = {
+                ["mapID"] = mapID,
+                ["level"] = level,
+                ["afix1"] = afix1,
+                ["afix2"] = afix2,
+                ["afix3"] = afix3
+            };
+            if(addon.main_frame:IsEventRegistered("BAG_UPDATE")) then 
+                addon.main_frame:UnregisterEvent("BAG_UPDATE");
+            end
+        end
+    else
+        if(not addon.main_frame:IsEventRegistered("BAG_UPDATE")) then 
+            addon.main_frame:registerEvent("BAG_UPDATE");
+        end
+    end
+end
 
 -- Function to get the info about mitics+!
 function addon:StoreCompletedMytic()
@@ -566,8 +615,8 @@ function addon:Update()
         -- Version 0.6 Demon Hunter fixed
         -- Version 0.7 Fixed Crash and fixed the update function was not updating anything Y.Y
         -- Version 1.0 Fixed error with mitic+ showing a different ilvl
-        if(oldVersionDatabase < 0.7) then
-            for name, value in pairs(addon.DataToSave.charactersDatabase.characters) do
+        for name, value in pairs(addon.DataToSave.charactersDatabase.characters) do
+            if(oldVersionDatabase < 0.7) then
                 if(value.pclassName == "DEMON HUNTER") then
                     value.pclassName = "DEMONHUNTER";
                 end
@@ -577,11 +626,14 @@ function addon:Update()
                     value.mytics.ChestAvailable = false;
                 end
             end
-        end
-        if(oldVersionDatabase < 1.0) then
-            for name, value in pairs(addon.DataToSave.charactersDatabase.characters) do
+            if(oldVersionDatabase < 1.0) then
                 if(value.currency.WakeningEssence == nil) then
                     value.currency.WakeningEssence = 0;
+                end
+            end
+            if(oldVersionDatabase < 1.1) then
+                if(value.mytics.Keystone == nil or type(value.mytics.Keystone) ~= "table") then
+                    value.mytics.Keystone = {};
                 end
             end
         end

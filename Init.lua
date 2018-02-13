@@ -57,7 +57,7 @@ function addon:eventHandling(event, arg1)
             addon.DataToSave.charactersDatabase.characters = {};
         end
         addon:Update();
-        self:UnregisterEvent("ADDON_LOADED");
+        self:UnregisterEvent(event);
     elseif(event == "PLAYER_LOGIN") then
         --Reset weekly stuff so its done for all characters
         if(addon.DataToSave.charactersDatabase.nextReset < time()) then
@@ -86,8 +86,19 @@ function addon:eventHandling(event, arg1)
     elseif(event == "CHAT_MSG_CURRENCY" or event == "BONUS_ROLL_RESULT" or event == "CHAT_MSG_LOOT") then
         -- Update currency
         addon:storeCurrencyInfo();
+        if(event == "CHAT_MSG_LOOT") then
+            local itemLooted = arg1;
+            if (string.lower(itemLooted):find('keystone')) then
+                addon:StoreKeyInformation();
+            end
+        end
+    elseif(event == "BAG_UPDATE") then
+        addon:StoreKeyInformation();
     elseif(event == "CHALLENGE_MODE_COMPLETED") then
+        -- Store mytic mode
         addon:StoreCompletedMytic();
+        -- Get the Info about the new key after a short interval
+        C_Timer.After(3, addon.StoreKeyInformation);
     elseif(event == "CHALLENGE_MODE_START") then
         if(addon.mytics == nil or type(addon.mytics) ~= "table") then
             addon.mytics = {};
@@ -103,21 +114,21 @@ end
 
 
 -- Event handling frame
-local main_frame = CreateFrame("Frame");
+addon.main_frame = CreateFrame("Frame");
 -- Set Scripts
-main_frame:SetScript("OnEvent", addon.eventHandling);
+addon.main_frame:SetScript("OnEvent", addon.eventHandling);
 -- Register events
-main_frame:RegisterEvent("ADDON_LOADED");
-main_frame:RegisterEvent("PLAYER_LOGIN");
-main_frame:RegisterEvent("GARRISON_FOLLOWER_CATEGORIES_UPDATED");
-main_frame:RegisterEvent("GARRISON_FOLLOWER_ADDED");
-main_frame:RegisterEvent("GARRISON_FOLLOWER_REMOVED");
-main_frame:RegisterEvent("GARRISON_LANDINGPAGE_SHIPMENTS");
-main_frame:RegisterEvent("GARRISON_MISSION_LIST_UPDATE");
-main_frame:RegisterEvent("GARRISON_MISSION_STARTED");
-main_frame:RegisterEvent("GARRISON_SHOW_LANDING_PAGE");
-main_frame:RegisterEvent("CHAT_MSG_CURRENCY");
-main_frame:RegisterEvent("BONUS_ROLL_RESULT");
-main_frame:RegisterEvent("CHAT_MSG_LOOT");
-main_frame:RegisterEvent("CHALLENGE_MODE_COMPLETED");
-main_frame:RegisterEvent("CHALLENGE_MODE_START");
+addon.main_frame:RegisterEvent("ADDON_LOADED");
+addon.main_frame:RegisterEvent("PLAYER_LOGIN");
+addon.main_frame:RegisterEvent("GARRISON_FOLLOWER_CATEGORIES_UPDATED");
+addon.main_frame:RegisterEvent("GARRISON_FOLLOWER_ADDED");
+addon.main_frame:RegisterEvent("GARRISON_FOLLOWER_REMOVED");
+addon.main_frame:RegisterEvent("GARRISON_LANDINGPAGE_SHIPMENTS");
+addon.main_frame:RegisterEvent("GARRISON_MISSION_LIST_UPDATE");
+addon.main_frame:RegisterEvent("GARRISON_MISSION_STARTED");
+addon.main_frame:RegisterEvent("GARRISON_SHOW_LANDING_PAGE");
+addon.main_frame:RegisterEvent("CHAT_MSG_CURRENCY");
+addon.main_frame:RegisterEvent("BONUS_ROLL_RESULT");
+addon.main_frame:RegisterEvent("CHAT_MSG_LOOT");
+addon.main_frame:RegisterEvent("CHALLENGE_MODE_COMPLETED");
+addon.main_frame:RegisterEvent("CHALLENGE_MODE_START");
