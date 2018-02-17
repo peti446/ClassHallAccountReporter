@@ -235,6 +235,12 @@ function ReportUI:createReportFrame()
         frame.CharacterName:SetText("|c"..RAID_CLASS_COLORS[v.pclassName].colorStr .. k); 
         frame.CharacterLevel:SetText(v.plevel or "1");
 
+        if(v.showKeystone) then
+            frame.CookingKeystoneText:SetText("Keystone in Bag:");
+            frame.cookinFrame:Hide();
+            frame.MyticPlusKeyFrame:Show();
+        end
+
         -- Currencies info of the characters
         ReportUI:UpdateCurrencies(frame, v);
 

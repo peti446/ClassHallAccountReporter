@@ -230,9 +230,9 @@
 						</Anchors>	
 					</FontString>
 					<!-- Cooking Text-->
-					<FontString inherits="GameFontHighlight" justifyH="LEFT" text="Cooking Orders:">
+					<FontString name="$parentCookingKeystoneText" parentKey="CookingKeystoneText" inherits="GameFontHighlight" justifyH="LEFT" text="Cooking Orders:">
 						<Anchors>
-							<Anchor point="TOPLEFT" x="405" y="-8"/>
+							<Anchor point="TOPLEFT" x="375" y="-8"/>
 						</Anchors>	
 					</FontString>
 					<!--Troops-->
@@ -278,13 +278,50 @@
 						</OnLeave>
 					</Scripts>
 				</Frame>
+				<Frame parentKey="MyticPlusKeyFrame" hide="true">
+				<!-- Cooking Recepies-->
+					<Size>
+						<AbsDimension x="200" y="50"/>
+					</Size>
+					<Anchors>
+						<Anchor point="TOPLEFT" x="380" y="-23"/>
+					</Anchors>	
+					<Layers>
+						<Layer level="ARTWORK">
+
+							<Texture name="$parentCookingOrderIcon" parentKey="CookingOrderIcon" file="Interface\ICONS\INV_Relics_Hourglass">
+								<Size>
+									<AbsDimension x="50" y="50"/>
+								</Size>
+								<Anchors>
+									<Anchor point="TOPLEFT"/>
+								</Anchors>
+							</Texture>
+							<FontString parentKey="firstLine" inherits="GameFontHighlight" justifyH="LEFT" text=" ">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.CookingOrderIcon" relativePoint="TOPRIGHT" x="4" y="0"/>
+								</Anchors>	
+							</FontString>
+							<FontString parentKey="secondLine" inherits="GameFontHighlight" justifyH="LEFT" text=" ">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.firstLine" relativePoint="BOTTOMLEFT" x="0" y="-5"/>
+								</Anchors>	
+							</FontString>
+							<FontString parentKey="thirdLine" inherits="GameFontHighlight" justifyH="LEFT" text=" ">
+								<Anchors>
+									<Anchor point="TOPLEFT" relativeKey="$parent.secondLine" relativePoint="BOTTOMLEFT" x="0" y="-5"/>
+								</Anchors>	
+							</FontString>
+						</Layer>
+					</Layers>
+				</Frame>
 				<Frame parentKey="cookinFrame" hide="false">
 					<!-- Cooking Recepies-->
 					<Size>
 						<AbsDimension x="200" y="50"/>
 					</Size>
 					<Anchors>
-						<Anchor point="TOPLEFT" x="410" y="-23"/>
+						<Anchor point="TOPLEFT" x="380" y="-23"/>
 					</Anchors>	
 					<Layers>
 						<Layer level="ARTWORK">

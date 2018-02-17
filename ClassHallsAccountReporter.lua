@@ -211,6 +211,7 @@ function addon:prepareCharacterDataBase()
         plevel =  UnitLevel("player"),
         pilvl = select(2, GetAverageItemLevel()),
         lastTimeUpdated = time(),
+        showKeystone = false,
         currency = {},
         troops = {},
         followers = {},
@@ -249,7 +250,7 @@ end
 --                                  Functions to get Players Info
 --##########################################################################################################################
 
-function addon:StoreKeyInformation()
+function addon:StoreKeyInformation(forced)
     -- Prepare the character if 
     if(UnitLevel('player') ~= 110) then
         return;
@@ -262,9 +263,9 @@ function addon:StoreKeyInformation()
     local keyStoneLink = addon:GetKeystoneFromBags();
     if(keyStoneLink) then
         if(keyStoneLink:find('keystone')) then
-            local mapid, level, afix1, afix2, afix3 = link:gsub('\124', '\124\124'):match(':(%d+):(%d+):(%d+):(%d+):(%d+)');
+            local mapid, level, afix1, afix2, afix3 = keyStoneLink:gsub('\124', '\124\124'):match(':(%d+):(%d+):(%d+):(%d+):(%d+)');
             addon.CurrentCharacterInfo.mytics.Keystone = {
-                ["mapID"] = mapID,
+                ["mapID"] = mapid,
                 ["level"] = level,
                 ["afix1"] = afix1,
                 ["afix2"] = afix2,
@@ -275,8 +276,8 @@ function addon:StoreKeyInformation()
             end
         end
     else
-        if(not addon.main_frame:IsEventRegistered("BAG_UPDATE")) then 
-            addon.main_frame:registerEvent("BAG_UPDATE");
+        if(not addon.main_frame:IsEventRegistered("BAG_UPDATE") and forced ~= "commandSearch") then 
+            addon.main_frame:RegisterEvent("BAG_UPDATE");
         end
     end
 end
@@ -634,6 +635,9 @@ function addon:Update()
             if(oldVersionDatabase < 1.1) then
                 if(value.mytics.Keystone == nil or type(value.mytics.Keystone) ~= "table") then
                     value.mytics.Keystone = {};
+                end
+                if(value.showKeystone == nil) then
+                    value.showKeystone = false;
                 end
             end
         end

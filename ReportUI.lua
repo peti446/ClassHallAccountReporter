@@ -27,6 +27,9 @@ function ReportUI:updateFrameCharacterInfo(silent)
     if(type(silent) ~= "boolean") then
         silent = false;
     end
+    if(not ReportUI.ReportFrame) then
+        return;
+    end
     for name, values in pairs(ReportUI.ReportFrame.charactersFrames) do
         if(values:IsShown()) then
             local frame = values.infoFrame;
@@ -89,8 +92,20 @@ function ReportUI:updateFrameCharacterInfo(silent)
                 end
             end
 
-            --Update cooking value
-            ReportUI:updateCooking(frame, characterInfo);
+            --Check if we are displaying the keystone or the cooking orders
+            if(characterInfo.showKeystone) then
+                frame.CookingKeystoneText:SetText("Keystone in Bag:");
+                frame.cookinFrame:Hide();
+                frame.MyticPlusKeyFrame:Show();
+                --Update the mytic plus txt
+                ReportUI:updateKeystoneInfo(frame.MyticPlusKeyFrame, characterInfo.mytics.Keystone);
+            else 
+                frame.CookingKeystoneText:SetText("Cooking Orders:");
+                frame.cookinFrame:Show();
+                frame.MyticPlusKeyFrame:Hide();
+                --Update cooking value
+                ReportUI:updateCooking(frame, characterInfo);
+            end
             
             
             --Update troops heads
@@ -424,4 +439,24 @@ function ReportUI:updateCooking(frame , v)
     else
         frame.cookinFrame.secondLine:SetText("Complete quest first!");
     end
+end
+
+
+function ReportUI:updateKeystoneInfo(frame, keystoneInfo)
+    --If no mapID is available, there will be no other information so no keystone stored )=
+    if(keystoneInfo.mapID == nil) then
+        frame.firstLine:SetText("");
+        frame.secondLine:SetText("|cFFFF0000No keystone.|r");
+        frame.thirdLine:SetText("");
+        return;
+    end
+
+    --There is a keystone lets print the information
+    frame.firstLine:SetText("|cffa335ee".. C_ChallengeMode.GetMapInfo(keystoneInfo.mapID) .. "|r");
+    frame.secondLine:SetText("Level " .. keystoneInfo.level);
+    name1, description1 = C_ChallengeMode.GetAffixInfo(keystoneInfo.afix1);
+    name2, description2 = C_ChallengeMode.GetAffixInfo(keystoneInfo.afix2);
+    name3, description3 = C_ChallengeMode.GetAffixInfo(keystoneInfo.afix3);
+    frame.thirdLine:SetText(name1 .. "," .. name2 .. "," .. name3);
+
 end
