@@ -2,7 +2,7 @@
 -- Namespace
 --############################################
 local _, addon = ...;
-addon.version = 1.1;
+addon.version = 1.2;
 addon.DataToSave = {};
 addon.DataToSave.charactersDatabase = {};
 addon.DataToSave.options = {};
@@ -587,6 +587,7 @@ function addon:resetAllCharactersWeeklyData()
             v.mytics.ChestAvailable = true;
         end
         wipe(v["mytics"]["list"]);
+        wipe(v["mytics"]["Keystone"]);
         v["lastTimeUpdated"] = time();
     end
     
