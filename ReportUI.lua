@@ -38,6 +38,7 @@ function ReportUI:updateFrameCharacterInfo(silent)
             --We only need to update currencies if we are online with the caracters, as oflines caharacters currencies will never change
             if(characterInfo == addon.CurrentCharacterInfo) then
                 ReportUI:UpdateCurrencies(frame, characterInfo);
+                addon:StoreKeyInformation("commandSearch");
             end
 
             --Update in progress Missions
@@ -457,6 +458,16 @@ function ReportUI:updateKeystoneInfo(frame, keystoneInfo)
     name1, description1 = C_ChallengeMode.GetAffixInfo(keystoneInfo.afix1);
     name2, description2 = C_ChallengeMode.GetAffixInfo(keystoneInfo.afix2);
     name3, description3 = C_ChallengeMode.GetAffixInfo(keystoneInfo.afix3);
-    frame.thirdLine:SetText(name1 .. "," .. name2 .. "," .. name3);
+    local finalString = "No affixes :)!";
+    if(name1) then
+        finalString = name1;
+        if(name2) then
+            finalString = finalString .. ", " .. name2;
+            if(name3) then
+                finalString = finalString .. ", " .. name3;
+            end
+        end
+    end
+    frame.thirdLine:SetText(finalString);
 
 end

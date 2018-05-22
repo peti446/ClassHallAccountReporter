@@ -2,7 +2,7 @@
 -- Namespace
 --############################################
 local _, addon = ...;
-addon.version = 1.2;
+addon.version = 1.3;
 addon.DataToSave = {};
 addon.DataToSave.charactersDatabase = {};
 addon.DataToSave.options = {};
@@ -261,7 +261,7 @@ function addon:StoreKeyInformation(forced)
     -- MAPID, level, afix1, afix2, afix3
     -- C_ChallengeMode.GetMapInfo(id);
     local keyStoneLink = addon:GetKeystoneFromBags();
-    if(keyStoneLink) then
+    if(keyStoneLink ~= nil) then
         if(keyStoneLink:find('keystone')) then
             local mapid, level, afix1, afix2, afix3 = keyStoneLink:gsub('\124', '\124\124'):match(':(%d+):(%d+):(%d+):(%d+):(%d+)');
             addon.CurrentCharacterInfo.mytics.Keystone = {
@@ -284,6 +284,9 @@ end
 
 -- Function to get the info about mitics+!
 function addon:StoreCompletedMytic()
+    if(not addon.mytics.CurrentID) then
+        return;
+    end
     -- Prepare the character if necesary
     addon:prepareCharacterDataBase();
     local mapID, level, timeN, onTime, keystoneUpgradeLevels = C_ChallengeMode.GetCompletionInfo();
