@@ -2,7 +2,7 @@
 -- Namespace
 --############################################
 local _, addon = ...;
-addon.version = 1.3;
+addon.version = 1.4;
 addon.DataToSave = {};
 addon.DataToSave.charactersDatabase = {};
 addon.DataToSave.options = {};
@@ -654,6 +654,23 @@ function addon:Update()
         if(oldVersionOptions < 0.7) then
             if(options.debug == nil) then
                 options.debug = false;
+            end
+        end
+        if(oldVersionOptions < 1.4) then
+            if(options.frameInfo == nil or type(options.frameInfo)~= "table") then
+                options.frameInfo = {};
+            end
+            if(options.frameInfo.frameX == nil) then
+                options.frameInfo.frameX = 0;
+            end
+            if(options.frameInfo.frameY == nil) then
+                options.frameInfo.frameY = 0;
+            end
+            if(options.frameInfo.relativePoint == nil) then
+                options.frameInfo.relativePoint = "CENTER";
+            end
+            if(options.frameInfo.point == nil) then
+                options.frameInfo.point = "CENTER";
             end
         end
         options.Version = addon.version;

@@ -21,6 +21,7 @@ function Commands:helpOutput()
 	addon:Print("|cff188E01/char showKeyInfo <character>|r - Toggles between showing the characters keystone or nomi's burned food order :) in the summary frame.");
 	addon:Print("|cff188E01/char showKeyInfo all <true/false>|r - Active or desactive the keystone information for all characters.");
 	addon:Print("|cff188E01/char showKeyInfo this|r - Toggles between showing the characters keystone or nomi's burned food order :) in the summary frame for this character.");
+	addon:Print("|cff188E01/char toggleMinimapIcon|r - Toggles the miniamp icon.");
 	addon:Print("-------------------------------------");
 end
 
@@ -78,7 +79,7 @@ function Commands:ActivateShowKeystone(character, active)
 
 end
 
-function Commands:ToggleMinimapIcon()
+function Commands:ToggleMinimapIconFunc()
 	local boolIsShown = not addon.DataToSave.options.showMinimapIcon;
 	addon.DataToSave.options.showMinimapIcon = boolIsShown;
 	if(boolIsShown) then
@@ -86,7 +87,6 @@ function Commands:ToggleMinimapIcon()
 	else
 		addon.MinimapIcon.frame:Hide();
 	end
-	addon:Debug("NANANAN " + boolIsShown);
 end
 
 --
@@ -101,7 +101,7 @@ Commands.List = {
 	["debug"] = Commands.toggleDebug,
 	["searchkey"] = Commands.KeystoneFindWrapper,
 	["showkeyinfo"] = Commands.ActivateShowKeystone,
-	["toggleMinimapIcon"] = Commands.ToggleMinimapIcon
+	["toggleminimapicon"] = Commands.ToggleMinimapIconFunc
 	};
 
 local function HandleSlashCommands(str)

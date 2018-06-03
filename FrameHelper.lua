@@ -146,7 +146,7 @@ function ReportUI:createReportFrame()
     -- Create the Report Frame and set its size and position
     ReportUI.ReportFrame = CreateFrame("Frame", "CHARReportFrame", UIParent, "ButtonFrameTemplate");
     ReportUI.ReportFrame:SetSize(1109,540);
-    ReportUI.ReportFrame:SetPoint("CENTER", UIParent, "CENTER", 0, 150);
+    ReportUI.ReportFrame:SetPoint(addon.DataToSave.options.frameInfo.point, UIParent, addon.DataToSave.options.frameInfo.relativePoint, addon.DataToSave.options.frameInfo.frameX, addon.DataToSave.options.frameInfo.frameY);
     ReportUI.ReportFrame:SetToplevel(true);
 
     -- Set Script
@@ -167,7 +167,15 @@ function ReportUI:createReportFrame()
     ReportUI.ReportFrame:EnableMouse(true);
     ReportUI.ReportFrame:RegisterForDrag("RightButton");
     ReportUI.ReportFrame:SetScript("OnDragStart", ReportUI.ReportFrame.StartMoving);
-    ReportUI.ReportFrame:SetScript("OnDragStop", ReportUI.ReportFrame.StopMovingOrSizing);
+    ReportUI.ReportFrame:SetScript("OnDragStop", function(self)
+         self:StopMovingOrSizing();
+         point_, _, relativePoint_, xOfs, yOfs = self:GetPoint(1);
+         addon.DataToSave.options.point = point_;
+         addon.DataToSave.options.relativePoint = relativePoint_;
+         addon.DataToSave.options.frameX = xOfs;
+         addon.DataToSave.options.frameY = yOfs;
+    end
+        );
 
     -- Create refresh and delete all data button
     ReportUI.ReportFrame.RefreshDataButton = ReportUI:createButton("TOPRIGHT", ReportUI.ReportFrame, ReportUI.ReportFrame.Bg, "TOPRIGHT", "Refresh Data", 100, 25, -5, -8);

@@ -22,7 +22,13 @@ function addon:getCHARdefaultOptions()
         ["Version"] = addon.version,
         ["showMinimapIcon"] = false,
         ["debug"] = false,
-        ["minimapPos"] = 145
+        ["minimapPos"] = 145,
+        ["frameInfo"] = {
+            ["frameX"] = 0,
+            ["frameY"] = 150,
+            ["relativePoint"] = "CENTER",
+            ["point"] = "CENTER",
+        }
     };
 end
 

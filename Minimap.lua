@@ -108,7 +108,7 @@ function MinimapIcon:initIcon()
 	iconFrame:SetScript("OnEnter", MinimapIcon.onEnter);
 	iconFrame:SetScript("OnLeave", MinimapIcon.onLeave);
 	iconFrame.icon:SetTexCoord(unpack(addon.ReportUI.classTextureCoords[select(2, UnitClass("player"))]));
-	if(addon.DataToSave.options.showMinimapIcon) then
+	if(not addon.DataToSave.options.showMinimapIcon) then
 		iconFrame:Hide();
 	end
 	MinimapIcon.frame = iconFrame;
