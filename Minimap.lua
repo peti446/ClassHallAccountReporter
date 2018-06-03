@@ -111,5 +111,6 @@ function MinimapIcon:initIcon()
 	if(addon.DataToSave.options.showMinimapIcon) then
 		iconFrame:Hide();
 	end
+	MinimapIcon.frame = iconFrame;
 end
 

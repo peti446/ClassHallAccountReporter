@@ -77,6 +77,13 @@ function Commands:ActivateShowKeystone(character, active)
 	addon.ReportUI:updateFrameCharacterInfo(true);
 
 end
+
+function Commands:ToggleMinimapIcon()
+	local boolIsShown = addon.MinimapIcon.frame:IsShown();
+	addon.MinimapIcon.frame:SetShown(not boolIsShown);
+	addon.DataToSave.options.showMinimapIcon = addon.MinimapIcon.frame:IsShown();
+end
+
 --
 --##########################################################################################################################
 --                                  Commands handling
@@ -88,7 +95,8 @@ Commands.List = {
 	["reset"] = addon.ReportUI.deleteAllData,
 	["debug"] = Commands.toggleDebug,
 	["searchkey"] = Commands.KeystoneFindWrapper,
-	["showkeyinfo"] = Commands.ActivateShowKeystone
+	["showkeyinfo"] = Commands.ActivateShowKeystone,
+	["toggleMinimapIcon"] = Commands.ToggleMinimapIcon
 	};
 
 local function HandleSlashCommands(str)
