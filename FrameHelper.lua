@@ -169,12 +169,12 @@ function ReportUI:createReportFrame()
     ReportUI.ReportFrame:SetScript("OnDragStart", ReportUI.ReportFrame.StartMoving);
     ReportUI.ReportFrame:SetScript("OnDragStop", function(self)
          self:StopMovingOrSizing();
-         point_, _, relativePoint_, xOfs, yOfs = self:GetPoint(1);
-         addon.DataToSave.options.point = point_;
-         addon.DataToSave.options.relativePoint = relativePoint_;
-         addon.DataToSave.options.frameX = xOfs;
-         addon.DataToSave.options.frameY = yOfs;
-    end
+         point1, _, relativePoint1, xOfs, yOfs = self:GetPoint(1);
+         addon.DataToSave.options.frameInfo.point = point1;
+         addon.DataToSave.options.frameInfo.relativePoint = relativePoint1;
+         addon.DataToSave.options.frameInfo.frameX = xOfs;
+         addon.DataToSave.options.frameInfo.frameY = yOfs;
+        end
         );
 
     -- Create refresh and delete all data button
