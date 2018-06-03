@@ -79,9 +79,14 @@ function Commands:ActivateShowKeystone(character, active)
 end
 
 function Commands:ToggleMinimapIcon()
-	local boolIsShown = addon.MinimapIcon.frame:IsShown();
-	addon.MinimapIcon.frame:SetShown(not boolIsShown);
-	addon.DataToSave.options.showMinimapIcon = addon.MinimapIcon.frame:IsShown();
+	local boolIsShown = not addon.DataToSave.options.showMinimapIcon;
+	addon.DataToSave.options.showMinimapIcon = boolIsShown;
+	if(boolIsShown) then
+		addon.MinimapIcon.frame:Show();
+	else
+		addon.MinimapIcon.frame:Hide();
+	end
+	addon:Debug("NANANAN " + boolIsShown);
 end
 
 --
