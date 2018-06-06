@@ -33,6 +33,28 @@ addon.ReportUI.classTextureCoords = {
     ["DEMONHUNTER"] = getClassTextCoord(0,1)
 };
 
+--------------------------- Button functions
+
+function ReportUI:SwitchAllToCooking()
+    for name, v in pairs(addon.DataToSave.charactersDatabase.characters) do
+        v.mSummaryFrame = "cook";
+    end
+    addon.ReportUI:updateFrameCharacterInfo(true);
+end
+
+function ReportUI:SwitchAllToMythics()
+    for name, v in pairs(addon.DataToSave.charactersDatabase.characters) do
+        v.mSummaryFrame = "keystone";
+    end
+    addon.ReportUI:updateFrameCharacterInfo(true);
+end
+
+function ReportUI:SwitchAllToHallMissions()
+    for name, v in pairs(addon.DataToSave.charactersDatabase.characters) do
+        v.mSummaryFrame = "hallmissions";
+    end
+    addon.ReportUI:updateFrameCharacterInfo(true);
+end
 
 function ReportUI:deleteAllData()
     addon.DataToSave.charactersDatabase.characters = {};
@@ -50,6 +72,8 @@ function ReportUI:deleteCharacter()
     wipe(addon.DataToSave.charactersDatabase.characters[self.character]);
     addon.DataToSave.charactersDatabase.characters[self.character] = nil;
 end
+
+--------------------------- Button functions
 
 function ReportUI:updateMissionsIcon()
     local needInfoUpdate = false;
@@ -182,6 +206,14 @@ function ReportUI:createReportFrame()
     ReportUI.ReportFrame.DeleeAllDataButton = ReportUI:createButton("TOPRIGHT", ReportUI.ReportFrame, ReportUI.ReportFrame.Bg, "TOPRIGHT", "Delete All Data", 110, 25, -125, -8);
     ReportUI.ReportFrame.RefreshDataButton:SetScript("OnClick", ReportUI.updateFrameCharacterInfo);
     ReportUI.ReportFrame.DeleeAllDataButton:SetScript("OnClick", ReportUI.deleteAllData);
+
+    -- Create button to switch all characters to view specific information
+    ReportUI.ReportFrame.CookingInfoSwitchButton = ReportUI:createButton("TOPLEFT", ReportUI.ReportFrame, ReportUI.ReportFrame.Bg, "TOPLEFT", "Show Cooking", 110, 25, 60, -8);
+    ReportUI.ReportFrame.MythicInfoSwitchButton = ReportUI:createButton("TOPLEFT", ReportUI.ReportFrame, ReportUI.ReportFrame.Bg, "TOPLEFT", "Show Mythics", 110, 25, 170, -8);
+    ReportUI.ReportFrame.MissionsInfoSwitchButton = ReportUI:createButton("TOPLEFT", ReportUI.ReportFrame, ReportUI.ReportFrame.Bg, "TOPLEFT", "Show Hall Missions", 150, 25, 280, -8);
+    ReportUI.ReportFrame.CookingInfoSwitchButton:SetScript("OnClick", ReportUI.SwitchAllToCooking);
+    ReportUI.ReportFrame.MythicInfoSwitchButton:SetScript("OnClick", ReportUI.SwitchAllToMythics);
+    ReportUI.ReportFrame.MissionsInfoSwitchButton:SetScript("OnClick", ReportUI.SwitchAllToHallMissions);
 
     -- Create character list frame
     ReportUI.ReportFrame.characterList = CreateFrame("ScrollFrame", nil, CHARReportFrame, "UIPanelScrollFrameTemplate");

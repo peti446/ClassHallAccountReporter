@@ -230,7 +230,7 @@
 						</Anchors>	
 					</FontString>
 					<!-- Cooking Text-->
-					<FontString name="$parentCookingKeystoneText" parentKey="CookingKeystoneText" inherits="GameFontHighlight" justifyH="LEFT" text="Cooking Orders:">
+					<FontString name="$parentSumarryText" parentKey="SumarryText" inherits="GameFontHighlight" justifyH="LEFT" text="Cooking Orders:">
 						<Anchors>
 							<Anchor point="TOPLEFT" x="375" y="-8"/>
 						</Anchors>	
@@ -278,18 +278,16 @@
 						</OnLeave>
 					</Scripts>
 				</Frame>
-				<Frame parentKey="MyticPlusKeyFrame" hide="true">
-				<!-- Cooking Recepies-->
+				<Frame parentKey="mSummaryFrame" hide="false">
 					<Size>
 						<AbsDimension x="200" y="50"/>
 					</Size>
 					<Anchors>
 						<Anchor point="TOPLEFT" x="380" y="-23"/>
-					</Anchors>	
+					</Anchors>
 					<Layers>
 						<Layer level="ARTWORK">
-
-							<Texture name="$parentCookingOrderIcon" parentKey="CookingOrderIcon" file="Interface\ICONS\INV_Relics_Hourglass">
+							<Texture name="$parentIcon" parentKey="Icon" file="Interface\ICONS\INV_RECIPE_70_ Scroll3Star">
 								<Size>
 									<AbsDimension x="50" y="50"/>
 								</Size>
@@ -299,7 +297,7 @@
 							</Texture>
 							<FontString parentKey="firstLine" inherits="GameFontHighlight" justifyH="LEFT" text=" ">
 								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.CookingOrderIcon" relativePoint="TOPRIGHT" x="4" y="0"/>
+									<Anchor point="TOPLEFT" relativeKey="$parent.Icon" relativePoint="TOPRIGHT" x="4" y="0"/>
 								</Anchors>	
 							</FontString>
 							<FontString parentKey="secondLine" inherits="GameFontHighlight" justifyH="LEFT" text=" ">
@@ -313,44 +311,7 @@
 								</Anchors>	
 							</FontString>
 						</Layer>
-					</Layers>
-				</Frame>
-				<Frame parentKey="cookinFrame" hide="false">
-					<!-- Cooking Recepies-->
-					<Size>
-						<AbsDimension x="200" y="50"/>
-					</Size>
-					<Anchors>
-						<Anchor point="TOPLEFT" x="380" y="-23"/>
-					</Anchors>	
-					<Layers>
-						<Layer level="ARTWORK">
-
-							<Texture name="$parentCookingOrderIcon" parentKey="CookingOrderIcon" file="Interface\ICONS\INV_RECIPE_70_ Scroll3Star">
-								<Size>
-									<AbsDimension x="50" y="50"/>
-								</Size>
-								<Anchors>
-									<Anchor point="TOPLEFT"/>
-								</Anchors>
-							</Texture>
-							<FontString parentKey="firstLine" inherits="GameFontHighlight" justifyH="LEFT" text=" ">
-								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.CookingOrderIcon" relativePoint="TOPRIGHT" x="4" y="0"/>
-								</Anchors>	
-							</FontString>
-							<FontString parentKey="secondLine" inherits="GameFontHighlight" justifyH="LEFT" text=" ">
-								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.firstLine" relativePoint="BOTTOMLEFT" x="0" y="-5"/>
-								</Anchors>	
-							</FontString>
-							<FontString parentKey="thirdLine" inherits="GameFontHighlight" justifyH="LEFT" text=" ">
-								<Anchors>
-									<Anchor point="TOPLEFT" relativeKey="$parent.secondLine" relativePoint="BOTTOMLEFT" x="0" y="-5"/>
-								</Anchors>	
-							</FontString>
-						</Layer>
-					</Layers>
+					</Layers>	
 				</Frame>
 			</Frames>
 		</Frame>

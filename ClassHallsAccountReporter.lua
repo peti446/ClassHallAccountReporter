@@ -219,6 +219,7 @@ function addon:prepareCharacterDataBase()
         availableMissions = {},
         troopsInTraining = {},
         shipments = {},
+        mSumarryFrame = "cook",
         mytics = {
             ["ChestAvailable"] = false,
             ["Keystone"] = {},
@@ -642,6 +643,14 @@ function addon:Update()
                 end
                 if(value.showKeystone == nil) then
                     value.showKeystone = false;
+                end
+            end
+            if(oldVersionDatabase < 1.4) then
+                if(value.mSumarryFrame == nil) then
+                    value.mSumarryFrame = "cook";
+                end
+                if(value.showKeystone ~= nil) then
+                    value.showKeystone = nil;
                 end
             end
         end

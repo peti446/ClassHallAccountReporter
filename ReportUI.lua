@@ -93,19 +93,15 @@ function ReportUI:updateFrameCharacterInfo(silent)
                 end
             end
 
-            --Check if we are displaying the keystone or the cooking orders
-            if(characterInfo.showKeystone) then
-                frame.CookingKeystoneText:SetText("Keystone in Bag:");
-                frame.cookinFrame:Hide();
-                frame.MyticPlusKeyFrame:Show();
-                --Update the mytic plus txt
-                ReportUI:updateKeystoneInfo(frame.MyticPlusKeyFrame, characterInfo.mytics.Keystone);
-            else 
-                frame.CookingKeystoneText:SetText("Cooking Orders:");
-                frame.cookinFrame:Show();
-                frame.MyticPlusKeyFrame:Hide();
-                --Update cooking value
-                ReportUI:updateCooking(frame, characterInfo);
+            --Todo check  value.mSummaryFrame
+            if(characterInfo.mSummaryFrame == "cook") then
+                frame.SumarryText:SetText("Cooking Orders:");
+                ReportUI:updateCooking(frame.mSummaryFrame, characterInfo);
+            elseif(characterInfo.mSummaryFrame == "keystone") then
+                frame.SumarryText:SetText("Keystone in Bag:");
+                ReportUI:updateKeystoneInfo(frame.mSummaryFrame, characterInfo.mytics.Keystone);
+            elseif(characterInfo.mSummaryFrame == "hallmissions") then
+                frame.SumarryText:SetText("Missions Summary:");
             end
             
             
@@ -418,32 +414,36 @@ function ReportUI:updateTroopsHeadTooltip(f, ttable)
 end
 
 function ReportUI:updateCooking(frame , v)
+    frame.Icon:SetTexture("Interface\ICONS\INV_RECIPE_70_ Scroll3Star");
     --Set the cooking shipments
     if(v.shipments[122].QuestCompleated == true) then
         if(v.shipments[122].shipmentsReady ~= nil) then
             addon:fixShipmentsInfo(v.shipments[122]);
             local ordersmsg = v.shipments[122].shipmentsReady.."/"..v.shipments[122].shipmentsTotal.. " ready Orders.";
             if(timeLeft == "" or v.shipments[122].duration == 0 or v.shipments[122].shipmentsTotal == 0) then
-                frame.cookinFrame.thirdLine:SetText("All Ready!");
+                frame.thirdLine:SetText("All Ready!");
             else
-                frame.cookinFrame.thirdLine:SetText(addon:convertSecondToTimeStr((v.shipments[122].shipmentsTotal*v.shipments[122].duration)-(v.shipments[122].shipmentsReady*v.shipments[122].duration)));
+                frame.thirdLine:SetText(addon:convertSecondToTimeStr((v.shipments[122].shipmentsTotal*v.shipments[122].duration)-(v.shipments[122].shipmentsReady*v.shipments[122].duration)));
             end
             if(v.shipments[122].shipmentsTotal < v.shipments[122].shipmentCapacity) then
-                frame.cookinFrame.firstLine:SetText(ordersmsg);
-                frame.cookinFrame.secondLine:SetText((v.shipments[122].shipmentCapacity-v.shipments[122].shipmentsTotal) .. " orders ready to start.");
+                frame.firstLine:SetText(ordersmsg);
+                frame.secondLine:SetText((v.shipments[122].shipmentCapacity-v.shipments[122].shipmentsTotal) .. " orders ready to start.");
             else
-                frame.cookinFrame.secondLine:SetText(ordersmsg);
+                frame.secondLine:SetText(ordersmsg);
             end
         else
-            frame.cookinFrame.secondLine:SetText("24 orders ready to start.");
+            frame.secondLine:SetText("24 orders ready to start.");
         end
     else
-        frame.cookinFrame.secondLine:SetText("Complete quest first!");
+        frame.secondLine:SetText("Complete quest first!");
     end
 end
 
 
 function ReportUI:updateKeystoneInfo(frame, keystoneInfo)
+    --Update icon
+    frame.Icon:SetTexture("Interface\ICONS\INV_Relics_Hourglass");
+
     --If no mapID is available, there will be no other information so no keystone stored )=
     if(keystoneInfo.mapID == nil) then
         frame.firstLine:SetText("");
@@ -470,4 +470,10 @@ function ReportUI:updateKeystoneInfo(frame, keystoneInfo)
     end
     frame.thirdLine:SetText(finalString);
 
+end
+
+function ReportUI:updateInProgressMissions(frame, InProgressMissions)
+    --Update icon
+    frame.Icon:SetTexture("Interface\ICONS\INV_Bijou_Gold");
+    
 end
