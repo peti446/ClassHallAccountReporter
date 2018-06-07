@@ -41,18 +41,22 @@ function ReportUI:updateFrameCharacterInfo(silent)
                 addon:StoreKeyInformation("commandSearch");
             end
 
+
             --Update in progress Missions
-            local amountOfMissionsInProgres = 0;
+            local InProgressSummaryData = {
+                ["total"] = 0,
+                ["available"] = 0,
+                ["compeated"] = 0,
+                ["lowestDuration"] = -1
+            };
+
+            local activeMissionsCount = 0;
             local followersTimeLeftInMission = {};
             for i, misFrame in pairs(frame.BigInfoFrame.ProgressMissionsArray) do
-                if(characterInfo.activeMissions[i])then
-                     ReportUI:updateMission(misFrame, characterInfo.activeMissions[i], followersTimeLeftInMission);
-                     amountOfMissionsInProgres = amountOfMissionsInProgres + 1;
-                else
+                if(not characterInfo.activeMissions[i])then
                     local nextFrame = misFrame.childMissFrame;
                     local parent = misFrame:GetParent();
                     local framePoint = misFrame; 
-                    --TODO: Check for MEGA parrent for the offset
                     while not parent:IsShown() do
                         if(parent:GetParent() == nil) then
                             break;
@@ -89,21 +93,10 @@ function ReportUI:updateFrameCharacterInfo(silent)
                     lastMissionFrame = frame.BigInfoFrame.ProgressMissionsArray[miss.name];
                     lastMissionFrame.TimeLeft:Hide();
                     lastMissionFrame.Status:Hide();
-                    ReportUI:updateMission(lastMissionFrame, characterInfo.activeMissions[miss.name], followersTimeLeftInMission);
                 end
+                ReportUI:updateMission(frame.BigInfoFrame.ProgressMissionsArray[miss.name], characterInfo.activeMissions[miss.name], followersTimeLeftInMission, InProgressSummaryData);
+                activeMissionsCount = activeMissionsCount +1;
             end
-
-            --Todo check  value.mSummaryFrame
-            if(characterInfo.mSummaryFrame == "cook") then
-                frame.SumarryText:SetText("Cooking Orders:");
-                ReportUI:updateCooking(frame.mSummaryFrame, characterInfo);
-            elseif(characterInfo.mSummaryFrame == "keystone") then
-                frame.SumarryText:SetText("Keystone in Bag:");
-                ReportUI:updateKeystoneInfo(frame.mSummaryFrame, characterInfo.mytics.Keystone);
-            elseif(characterInfo.mSummaryFrame == "hallmissions") then
-                frame.SumarryText:SetText("Missions Summary:");
-            end
-            
             
             --Update troops heads
             for Troopname, troopHead in pairs(frame.troopHeads) do
@@ -152,6 +145,7 @@ function ReportUI:updateFrameCharacterInfo(silent)
             if(#frame.BigInfoFrame.AvailableMissionsArray > 0) then
                 lastMissionFrame = frame.BigInfoFrame.AvailableMissionsArray[#frame.BigInfoFrame.AvailableMissionsArray];
             end
+            local availableMissionsCount = 0;
             for i, miss in pairs(characterInfo.availableMissions) do
                 if(frame.BigInfoFrame.AvailableMissionsArray[miss.name] == nil) then
                     if(not miss.offerEndTime or (miss.offerEndTime + miss.timeInfoCollected) > time()) then
@@ -169,13 +163,28 @@ function ReportUI:updateFrameCharacterInfo(silent)
                         end
                     end
                 end
+                availableMissionsCount = availableMissionsCount +1;
             end
 
-            frame.BigInfoFrame.AvailableText:SetText("Available Missions".." (".. amountOfMissions.."):");
-            frame.BigInfoFrame.ProgressText:SetText("Missions Inprogress".." (".. amountOfMissionsInProgres.."):");
+            frame.BigInfoFrame.AvailableText:SetText("Available Missions".." (".. availableMissionsCount.."):");
+            frame.BigInfoFrame.ProgressText:SetText("Missions Inprogress".." (".. activeMissionsCount.."):");
             --Update followers text
             for fid, followerFrame in pairs(frame.BigInfoFrame.FollowersArray) do
                 addon.FollowersHelper:SetStatusText(followerFrame, characterInfo.followers[fid].status,followersTimeLeftInMission[fid])  
+            end
+
+            --Todo check  value.mSummaryFrame
+            if(characterInfo.mSummaryFrame == "cook") then
+                frame.SumarryText:SetText("Cooking Orders:");
+                ReportUI:updateCooking(frame.mSummaryFrame, characterInfo);
+            elseif(characterInfo.mSummaryFrame == "keystone") then
+                frame.SumarryText:SetText("Keystone in Bag:");
+                ReportUI:updateKeystoneInfo(frame.mSummaryFrame, characterInfo.mytics.Keystone);
+            elseif(characterInfo.mSummaryFrame == "hallmissions") then
+                frame.SumarryText:SetText("Missions Summary:");
+                InProgressSummaryData.total = activeMissionsCount;
+                InProgressSummaryData.available = availableMissionsCount;
+                ReportUI:updateInProgressMissions(frame.mSummaryFrame, InProgressSummaryData);
             end
 
             --Update Mytics +
@@ -289,7 +298,7 @@ function ReportUI:UpdateMissionsReward(f, reward, index)
     RewardButton:Show();
 end
 
-function ReportUI:updateMission(lastMissionFrame, miss, followersTimeLeftInMission)
+function ReportUI:updateMission(lastMissionFrame, miss, followersTimeLeftInMission, missionsData)
     --Set title
     lastMissionFrame.Title:SetText(miss.name);
     --Set atlas icon
@@ -307,6 +316,7 @@ function ReportUI:updateMission(lastMissionFrame, miss, followersTimeLeftInMissi
     lastMissionFrame.rewardsIndex = rewardIndex;
     --Set the background atlas for the current mission status
     if (miss.missionEndTime <= time()) then
+        missionsData.compeated = missionsData.compeated + 1;
         lastMissionFrame.BG:SetAtlas("GarrLanding-Mission-Complete");
         lastMissionFrame.MissionType:SetTextColor(1, 1, 0);
         lastMissionFrame.MissionType:SetText("Mission completed!");
@@ -320,6 +330,9 @@ function ReportUI:updateMission(lastMissionFrame, miss, followersTimeLeftInMissi
         lastMissionFrame.BG:SetAtlas("GarrLanding-Mission-InProgress");
         -- Set missions time left to complete
         local seconds = miss.missionEndTime - time();
+        if(missionsData.lowestDuration == -1 or missionsData.lowestDuration > seconds) then
+            missionsData.lowestDuration = seconds;
+        end
         --Set mission duration
         lastMissionFrame.MissionType:SetTextColor(0.78, 0.75, 0.73);
         lastMissionFrame.MissionType:SetText("Completed in: " .. addon:convertSecondToTimeStr(seconds));
@@ -414,7 +427,7 @@ function ReportUI:updateTroopsHeadTooltip(f, ttable)
 end
 
 function ReportUI:updateCooking(frame , v)
-    frame.Icon:SetTexture("Interface\ICONS\INV_RECIPE_70_ Scroll3Star");
+    frame.Icon:SetTexture("Interface\\ICONS\\INV_RECIPE_70_ Scroll3Star");
     --Set the cooking shipments
     if(v.shipments[122].QuestCompleated == true) then
         if(v.shipments[122].shipmentsReady ~= nil) then
@@ -442,7 +455,7 @@ end
 
 function ReportUI:updateKeystoneInfo(frame, keystoneInfo)
     --Update icon
-    frame.Icon:SetTexture("Interface\ICONS\INV_Relics_Hourglass");
+    frame.Icon:SetTexture("Interface\\ICONS\\INV_Relics_Hourglass");
 
     --If no mapID is available, there will be no other information so no keystone stored )=
     if(keystoneInfo.mapID == nil) then
@@ -474,6 +487,25 @@ end
 
 function ReportUI:updateInProgressMissions(frame, InProgressMissions)
     --Update icon
-    frame.Icon:SetTexture("Interface\ICONS\INV_Bijou_Gold");
-    
+    frame.Icon:SetTexture("Interface\\ICONS\\INV_Bijou_Bronze");
+    frame.firstLine:SetText(" ");
+    if(InProgressMissions.total ~= 0) then
+        frame.secondLine:SetText("Compleated: " .. InProgressMissions.compeated .. " / " .. InProgressMissions.total);
+        if(InProgressMissions.lowestDuration > 0 ) then
+            frame.thirdLine:SetText("Next finishes in: " .. addon:convertSecondToTimeStr(InProgressMissions.lowestDuration));
+            if(InProgressMissions.lowestDuration > 18000) then
+                frame.Icon:SetTexture("Interface\\ICONS\\INV_Bijou_Red");
+            elseif(InProgressMissions.lowestDuration > 10800) then 
+                frame.Icon:SetTexture("Interface\\ICONS\\INV_Bijou_Orange");
+            else
+                frame.Icon:SetTexture("Interface\\ICONS\\INV_Bijou_Yellow");
+            end
+        end
+    else 
+        frame.secondLine:SetText("No missions in progress.");
+        frame.thirdLine:SetText("Available missions: " .. InProgressMissions.available);
+    end
+    if(InProgressMissions.total == InProgressMissions.compeated) then
+        frame.Icon:SetTexture("Interface\\ICONS\\INV_Bijou_Green");
+    end
 end
