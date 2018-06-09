@@ -56,6 +56,17 @@ function ReportUI:SwitchAllToHallMissions()
     addon.ReportUI:updateFrameCharacterInfo(true);
 end
 
+function ReportUI:SwitchCharacterCooking()
+    addon.DataToSave.charactersDatabase.characters[self:GetParent().character].mSummaryFrame = "cook";
+end
+
+function ReportUI:SwitchCharacterKeystone()
+    addon.DataToSave.charactersDatabase.characters[self:GetParent().character].mSummaryFrame = "keystone";
+end
+function ReportUI:SwitchCharacterHallMissions()
+    addon.DataToSave.charactersDatabase.characters[self:GetParent().character].mSummaryFrame = "hallmissions";
+end
+
 function ReportUI:deleteAllData()
     addon.DataToSave.charactersDatabase.characters = {};
     addon.CurrentCharacterInfo = {};
@@ -68,9 +79,9 @@ function ReportUI:deleteAllData()
 end
 
 function ReportUI:deleteCharacter()
-    ReportUI.ReportFrame.charactersFrames[self.character]:Hide();
-    wipe(addon.DataToSave.charactersDatabase.characters[self.character]);
-    addon.DataToSave.charactersDatabase.characters[self.character] = nil;
+    ReportUI.ReportFrame.charactersFrames[self:GetParent().character]:Hide();
+    wipe(addon.DataToSave.charactersDatabase.characters[self:GetParent().character]);
+    addon.DataToSave.charactersDatabase.characters[self:GetParent().character] = nil;
 end
 
 --------------------------- Button functions
@@ -209,7 +220,7 @@ function ReportUI:createReportFrame()
 
     -- Create button to switch all characters to view specific information
     ReportUI.ReportFrame.CookingInfoSwitchButton = ReportUI:createButton("TOPLEFT", ReportUI.ReportFrame, ReportUI.ReportFrame.Bg, "TOPLEFT", "Show Cooking", 110, 25, 60, -8);
-    ReportUI.ReportFrame.MythicInfoSwitchButton = ReportUI:createButton("TOPLEFT", ReportUI.ReportFrame, ReportUI.ReportFrame.Bg, "TOPLEFT", "Show Mythics", 110, 25, 170, -8);
+    ReportUI.ReportFrame.MythicInfoSwitchButton = ReportUI:createButton("TOPLEFT", ReportUI.ReportFrame, ReportUI.ReportFrame.Bg, "TOPLEFT", "Show Keystone", 110, 25, 170, -8);
     ReportUI.ReportFrame.MissionsInfoSwitchButton = ReportUI:createButton("TOPLEFT", ReportUI.ReportFrame, ReportUI.ReportFrame.Bg, "TOPLEFT", "Show Hall Missions", 150, 25, 280, -8);
     ReportUI.ReportFrame.CookingInfoSwitchButton:SetScript("OnClick", ReportUI.SwitchAllToCooking);
     ReportUI.ReportFrame.MythicInfoSwitchButton:SetScript("OnClick", ReportUI.SwitchAllToMythics);
@@ -386,9 +397,17 @@ function ReportUI:createReportFrame()
             lastFollowerFrame:Show();
             
         end
+        --Create the thre summary frame controll button
+        frame.BigInfoFrame.character = k;
+        frame.BigInfoFrame.showCokkingButton = ReportUI:createButton("BOTTOMRIGHT", frame.BigInfoFrame, frame.BigInfoFrame, "BOTTOMRIGHT", "Show Cooking", 135, 35, -15, 55);
+        frame.BigInfoFrame.showKeystoneButton = ReportUI:createButton("BOTTOMRIGHT", frame.BigInfoFrame, frame.BigInfoFrame, "BOTTOMRIGHT", "Show Keystone", 135, 35, -160, 15);
+        frame.BigInfoFrame.showHallMissionsbutton = ReportUI:createButton("BOTTOMRIGHT", frame.BigInfoFrame, frame.BigInfoFrame, "BOTTOMRIGHT", "Show Hall Missions", 135, 35, -160, 55);
+        frame.BigInfoFrame.showCokkingButton:SetScript("OnClick", ReportUI.SwitchCharacterCooking);
+        frame.BigInfoFrame.showKeystoneButton:SetScript("OnClick", ReportUI.SwitchCharacterKeystone);
+        frame.BigInfoFrame.showHallMissionsbutton:SetScript("OnClick", ReportUI.SwitchCharacterHallMissions);
+
         -- Create delete button
         frame.BigInfoFrame.deleteCharacter = ReportUI:createButton("BOTTOMRIGHT", frame.BigInfoFrame, frame.BigInfoFrame, "BOTTOMRIGHT", "Delete Character", 135, 35, -15, 15);
-        frame.BigInfoFrame.deleteCharacter.character = k;
         frame.BigInfoFrame.deleteCharacter:SetScript("OnClick", ReportUI.deleteCharacter);
         -- Hide the frame 
         frame.BigInfoFrame:Hide();
