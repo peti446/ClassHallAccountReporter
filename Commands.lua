@@ -18,9 +18,7 @@ function Commands:helpOutput()
 	addon:Print("|cff188E01/char reset|r - Resets all the information");
 	addon:Print("|cff188E01/char debug|r - Enables Debug mode");
 	addon:Print("|cff188E01/char searchKey|r - Search for a keystone in you inventory. Use it if the addon did not auto detect it.");
-	addon:Print("|cff188E01/char showKeyInfo <character>|r - Toggles between showing the characters keystone or nomi's burned food order :) in the summary frame.");
-	addon:Print("|cff188E01/char showKeyInfo all <true/false>|r - Active or desactive the keystone information for all characters.");
-	addon:Print("|cff188E01/char showKeyInfo this|r - Toggles between showing the characters keystone or nomi's burned food order :) in the summary frame for this character.");
+	addon:Print("|cff188E01/char setsummary <cook/keystone/hallmissions> <this/character/all>|r - Changes the summary frame to display nomies cooking order, the keystone information or hallmissions sumarry for this character, a specific character or all of them.");
 	addon:Print("|cff188E01/char toggleMinimapIcon|r - Toggles the miniamp icon.");
 	addon:Print("-------------------------------------");
 end
@@ -40,14 +38,26 @@ function Commands:KeystoneFindWrapper()
 	addon:StoreKeyInformation("commandSearch");
 end
 
-function Commands:ActivateShowKeystone(character, active)
-	--Check if character is given
-	if(not character) then
+function Commands:ToggleMinimapIconFunc()
+	local boolIsShown = not addon.DataToSave.options.showMinimapIcon;
+	addon.DataToSave.options.showMinimapIcon = boolIsShown;
+	if(boolIsShown) then
+		addon.MinimapIcon.frame:Show();
+	else
+		addon.MinimapIcon.frame:Hide();
+	end
+end
+
+function Commands:SetSummaryStatus(sumType, character)
+	--Check if character and the type is given
+	sumType = sumType:lower();
+	if(not character or not sumType or (sumType ~= "cook" and sumType ~= "keystone" and sumType ~= "hallmissions")) then
 		addon:Print("|cffff0000Invalid command argument....|r");
 		Commands:helpOutput();
 		return;
 	end
 
+	--Checks if we are ussing a character name or a shorcut
 	if(character ~= "all" and character ~= "this") then
 		--Check if character is valid
 		if(type(addon.DataToSave.charactersDatabase.characters[character]) ~= "table") then
@@ -57,36 +67,17 @@ function Commands:ActivateShowKeystone(character, active)
 			addon:Print("If the character exists but is not been shown in the frame, log-in with the character first and then log out, then try the command again.");
 			return;
 		end
-
-		--Show the keystone for the character
-		addon.DataToSave.charactersDatabase.characters[character].showKeystone = not addon.DataToSave.charactersDatabase.characters[character].showKeystone;
+		addon.DataToSave.charactersDatabase.characters[character].mSummaryFrame = sumType;
 	else
 		if(character == "all") then
 			for name, v in pairs(addon.DataToSave.charactersDatabase.characters) do
-				local bool = false;
-				if(active == "true") then
-					bool = true;
-				end
-				v.showKeystone = bool;
+				v.mSummaryFrame = sumType;
 			end
-		elseif(character == "this") then
-			local name = select(1, UnitName("player")).."-"..GetRealmName();
-			addon.DataToSave.charactersDatabase.characters[name].showKeystone = not addon.DataToSave.charactersDatabase.characters[name].showKeystone;
+		else
+			addon.DataToSave.charactersDatabase.characters[UnitName("player")).."-"..GetRealmName()].mSummaryFrame = sumType;
 		end
 	end
-	--Update character info
 	addon.ReportUI:updateFrameCharacterInfo(true);
-
-end
-
-function Commands:ToggleMinimapIconFunc()
-	local boolIsShown = not addon.DataToSave.options.showMinimapIcon;
-	addon.DataToSave.options.showMinimapIcon = boolIsShown;
-	if(boolIsShown) then
-		addon.MinimapIcon.frame:Show();
-	else
-		addon.MinimapIcon.frame:Hide();
-	end
 end
 
 --
@@ -100,7 +91,7 @@ Commands.List = {
 	["reset"] = addon.ReportUI.deleteAllData,
 	["debug"] = Commands.toggleDebug,
 	["searchkey"] = Commands.KeystoneFindWrapper,
-	["showkeyinfo"] = Commands.ActivateShowKeystone,
+	["setsummary"] = Commands.SetSummaryStatus,
 	["toggleminimapicon"] = Commands.ToggleMinimapIconFunc
 	};
 
