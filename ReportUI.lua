@@ -428,6 +428,9 @@ end
 
 function ReportUI:updateCooking(frame , v)
     frame.Icon:SetTexture("Interface\\ICONS\\INV_RECIPE_70_ Scroll3Star");
+    frame.firstLine:SetText(" ");
+    frame.secondLine:SetText(" ");
+    frame.thirdLine:SetText(" ");
     --Set the cooking shipments
     if(v.shipments[122].QuestCompleated == true) then
         if(v.shipments[122].shipmentsReady ~= nil) then
@@ -456,6 +459,9 @@ end
 function ReportUI:updateKeystoneInfo(frame, keystoneInfo)
     --Update icon
     frame.Icon:SetTexture("Interface\\ICONS\\INV_Relics_Hourglass");
+    frame.firstLine:SetText(" ");
+    frame.secondLine:SetText(" ");
+    frame.thirdLine:SetText(" ");
 
     --If no mapID is available, there will be no other information so no keystone stored )=
     if(keystoneInfo.mapID == nil) then
@@ -489,6 +495,8 @@ function ReportUI:updateInProgressMissions(frame, InProgressMissions)
     --Update icon
     frame.Icon:SetTexture("Interface\\ICONS\\INV_Bijou_Bronze");
     frame.firstLine:SetText(" ");
+    frame.secondLine:SetText(" ");
+    frame.thirdLine:SetText(" ");
     if(InProgressMissions.total ~= 0) then
         frame.secondLine:SetText("Compleated: " .. InProgressMissions.compeated .. " / " .. InProgressMissions.total);
         if(InProgressMissions.lowestDuration > 0 ) then
