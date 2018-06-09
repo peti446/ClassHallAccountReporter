@@ -58,13 +58,16 @@ end
 
 function ReportUI:SwitchCharacterCooking()
     addon.DataToSave.charactersDatabase.characters[self:GetParent().character].mSummaryFrame = "cook";
+    addon.ReportUI:updateFrameCharacterInfo(true);
 end
 
 function ReportUI:SwitchCharacterKeystone()
     addon.DataToSave.charactersDatabase.characters[self:GetParent().character].mSummaryFrame = "keystone";
+    addon.ReportUI:updateFrameCharacterInfo(true);
 end
 function ReportUI:SwitchCharacterHallMissions()
     addon.DataToSave.charactersDatabase.characters[self:GetParent().character].mSummaryFrame = "hallmissions";
+    addon.ReportUI:updateFrameCharacterInfo(true);
 end
 
 function ReportUI:deleteAllData()
