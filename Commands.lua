@@ -74,7 +74,7 @@ function Commands:SetSummaryStatus(sumType, character)
 				v.mSummaryFrame = sumType;
 			end
 		else
-			addon.DataToSave.charactersDatabase.characters[UnitName("player")).."-"..GetRealmName()].mSummaryFrame = sumType;
+			addon.DataToSave.charactersDatabase.characters[select(1,UnitName("player")).."-"..GetRealmName()].mSummaryFrame = sumType;
 		end
 	end
 	addon.ReportUI:updateFrameCharacterInfo(true);
