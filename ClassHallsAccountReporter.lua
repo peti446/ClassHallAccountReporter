@@ -570,7 +570,7 @@ function addon:allInfoUpdater()
         addon.storeShipmentsInfo();
         addon.storeFollowersAndTroopsInfo();
         addon.storeCurrencyInfo();
-        addon.CurrentCharacterInfo.mytics.ChestAvailable = C_ChallengeMode.IsWeeklyRewardAvailable();
+        addon.CurrentCharacterInfo.mytics.ChestAvailable = C_MythicPlus.IsWeeklyRewardAvailable();
         addon.CurrentCharacterInfo.plevel =  UnitLevel("player");
         addon.CurrentCharacterInfo.pilvl = select(2, GetAverageItemLevel());
 

@@ -231,8 +231,8 @@ function ReportUI:createReportFrame()
 
     -- Create character list frame
     ReportUI.ReportFrame.characterList = CreateFrame("ScrollFrame", nil, CHARReportFrame, "UIPanelScrollFrameTemplate");
-    ReportUI.ReportFrame.characterList:SetPoint("TOPRIGHT", ReportUI.ReportFrame.TopTileStreaks, "BOTTOMRIGHT", -6, -5);
-    ReportUI.ReportFrame.characterList:SetPoint("BOTTOMLEFT", ReportUI.ReportFrame.leftBorderBar, "BOTTOMLEFT", 13, 19);
+    ReportUI.ReportFrame.characterList:SetPoint("TOPRIGHT", ReportUI.ReportFrame.TopRightCorner, "BOTTOMRIGHT", -9, -30);
+    ReportUI.ReportFrame.characterList:SetPoint("BOTTOMLEFT", ReportUI.ReportFrame.BotLeftCorner, "BOTTOMLEFT", 13, 34);
     scrollbar = CreateFrame("Slider", nil, ReportUI.ReportFrame.characterList, "UIPanelStretchableArtScrollBarTemplate");
     scrollbar:ClearAllPoints();
     scrollbar:SetPoint("TOPRIGHT", ReportUI.ReportFrame.characterList, "TOPRIGHT", -2, -20) ;

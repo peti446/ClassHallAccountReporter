@@ -257,7 +257,7 @@ function ReportUI:UpdateMissionsReward(f, reward, index)
         RewardButton.itemID = reward.itemID;
         local _, _, quality, _, _, _, _, _, _, itemTexture = GetItemInfo(reward.itemID);
         RewardButton.Icon:SetTexture(itemTexture);
-        SetItemButtonQuality(RewardButton, quality, reward.itemID);					
+        --SetItemButtonQuality(RewardButton, quality, reward.itemID);					
         if (reward.quantity > 1) then
             RewardButton.Quantity:SetText(reward.quantity);
             RewardButton.Quantity:Show();
@@ -472,7 +472,7 @@ function ReportUI:updateKeystoneInfo(frame, keystoneInfo)
     end
 
     --There is a keystone lets print the information
-    frame.firstLine:SetText("|cffa335ee".. C_ChallengeMode.GetMapInfo(keystoneInfo.mapID) .. "|r");
+    frame.firstLine:SetText("|cffa335ee".. C_ChallengeMode.GetMapUIInfo(keystoneInfo.mapID) .. "|r");
     frame.secondLine:SetText("Level " .. keystoneInfo.level);
     name1, description1 = C_ChallengeMode.GetAffixInfo(keystoneInfo.afix1);
     name2, description2 = C_ChallengeMode.GetAffixInfo(keystoneInfo.afix2);

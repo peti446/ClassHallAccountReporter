@@ -73,8 +73,8 @@ function addon:eventHandling(event, arg1)
         --Load commands
         addon.Commands:initCommands();
         --Get all data about mitics +
-        C_ChallengeMode.RequestMapInfo();
-        C_ChallengeMode.RequestRewards();
+        C_MythicPlus.RequestMapInfo();
+        C_MythicPlus.RequestRewards();
         addon.MinimapIcon:initIcon();
         self:UnregisterEvent(event);
     elseif(event == "GARRISON_LANDINGPAGE_SHIPMENTS") then
