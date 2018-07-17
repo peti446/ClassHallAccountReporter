@@ -2,7 +2,7 @@
 -- Namespace
 --############################################
 local _, addon = ...;
-addon.version = 1.4;
+addon.version = 1.5;
 addon.DataToSave = {};
 addon.DataToSave.charactersDatabase = {};
 addon.DataToSave.options = {};
