@@ -75,6 +75,7 @@ function addon:eventHandling(event, arg1)
         --Get all data about mitics +
         C_MythicPlus.RequestMapInfo();
         C_MythicPlus.RequestRewards();
+        C_MythicPlus.RequestCurrentAffixes();
         addon.MinimapIcon:initIcon();
         self:UnregisterEvent(event);
     elseif(event == "GARRISON_LANDINGPAGE_SHIPMENTS") then

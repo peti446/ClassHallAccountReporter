@@ -2,7 +2,7 @@
 -- Namespace
 --############################################
 local _, addon = ...;
-addon.version = 1.5;
+addon.version = 1.6;
 addon.DataToSave = {};
 addon.DataToSave.charactersDatabase = {};
 addon.DataToSave.options = {};
@@ -264,7 +264,7 @@ function addon:StoreKeyInformation(forced)
     local keyStoneLink = addon:GetKeystoneFromBags();
     if(keyStoneLink ~= nil) then
         if(keyStoneLink:find('keystone')) then
-            local mapid, level, afix1, afix2, afix3 = keyStoneLink:gsub('\124', '\124\124'):match(':(%d+):(%d+):(%d+):(%d+):(%d+)');
+            local _,mapid, level, afix1, afix2, afix3 = keyStoneLink:gsub('\124', '\124\124'):match(':(%d+):(%d+):(%d+):(%d+):(%d+):(%d+)');
             addon.CurrentCharacterInfo.mytics.Keystone = {
                 ["mapID"] = mapid,
                 ["level"] = level,
@@ -297,7 +297,7 @@ function addon:StoreCompletedMytic()
     
     addon:Debug("Mytic + compleated. Info: ".. addon.mytics.CurrentID .. " " .. mapID .. " " .. level .. " " .. timeN .. " " .. tostring(onTime) .. " " .. keystoneUpgradeLevels);
     table.insert(addon.CurrentCharacterInfo.mytics.list[addon.mytics.CurrentID], {
-        ["mapID"] = mapID,
+        ["mapID"] = addon.mytics.CurrentID,
         ["level"] = level,
         ["TimeToComplete"] = timeN,
         ["onTime"] = onTime,

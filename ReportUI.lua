@@ -194,7 +194,7 @@ function ReportUI:updateFrameCharacterInfo(silent)
                 for i, minfo in ipairs(subtable) do
                     if(higestLevel < minfo.level) then
                         higestLevel = minfo.level;
-                        name = C_ChallengeMode.GetMapInfo(id);
+                        name = C_ChallengeMode.GetMapUIInfo(id);
                     end
                 end
             end
